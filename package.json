@@ -1,6 +1,6 @@
 {
   "name": "animate-sprite",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "Javascript plugin to animate frames from sprite image",
   "author": "Dmitry Kovalev",
   "license": "MIT",

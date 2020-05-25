@@ -9,7 +9,7 @@ sequence of frames that looks like 3d. It supports playing full animation
 sequence, rotate an image by the mouse and touch, autoplay, loop, 
 reverse and exposes an API to programmatically control the animation.
 
-To use it you have to export animation from your 3d app as a series of 
+To use it you should export animation from your 3d app as a series of 
 frames and combine them in one image file (sprite).
 
 * [Installation](#installation)
@@ -91,7 +91,7 @@ after initialization.
 ## <a name="options"></a>Options
 
 | Parameter  | Required | Default | Description |
-| :---:  | :---:| --- | ---  |
+| :---  | :---:| :---: | ---  |
 | **width** | :heavy_check_mark:  |   | Width of one frame in a sprite  |
 | **height** | :heavy_check_mark: |   | Height of one frame in a sprite  |
 | **frames** | :heavy_check_mark: |   | Total number of frames  |

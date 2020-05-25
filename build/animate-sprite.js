@@ -1,5 +1,5 @@
 /*!
- *  animate-sprite 0.9.0
+ *  @its2easy/animate-sprite 1.0.1
  *  https://github.com/its2easy/animate-sprite
  *          
  *  Copyright (c) 2020 Dmitry Kovalev,

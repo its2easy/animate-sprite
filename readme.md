@@ -21,23 +21,27 @@ frames and combine them in one image file (sprite).
 
 ## <a name="installation"></a>Installation
 ### Script tag
-Download
-<a href="build/animate-sprite.min.js" download>minified version</a>
-
-Include in html
+Add with CDN link:
+```html
+<script src="https://unpkg.com/@its2easy/animate-sprite"></script>
 ```
+Or download <a href="build/animate-sprite.min.js" download>minified version</a> 
+from repository and include in html:
+```html
 <script src="animate-sprite.min.js"></script>
 ```
 ### npm
-todo
+```
+npm i @its2easy/animate-sprite --save
+```
 
 ## <a name="usage"></a>Usage
 Create an element with background
-```
+```html
 <div id="sprite" style="background-image: url('images/sprite.jpg')"></div>
 ```
 Initialize with options
-```
+```javascript
 var element = document.getElementById('sprite');
 var sprite = animateSprite.init(element,
     {
@@ -53,7 +57,7 @@ var sprite = animateSprite.init(element,
 sprite.play();
 ```
 Or with inline options
-```
+```html
 <div id="sprite" 
     style="background-image: url('images/sprite.jpg')"
     data-width="700"
@@ -61,7 +65,7 @@ Or with inline options
     data-frames="60"
 ></div>
 ```
-```
+```javascript
 var element = document.getElementById('sprite');
 var sprite = animateSprite.init(element);
 sprite.play();
@@ -69,11 +73,11 @@ sprite.play();
 > Inline options have higher priority
 
 ### Usage with bundlers
-```
-import { init as spriteInit } from 'animate-sprite';
+```javascript
+import { init as spriteInit } from '@its2easy/animate-sprite';
 let sprite = spriteInit(element, options);
 ```
-
+> If ES modules are supported - untranspiled es6 code will be imported 
 
 ### Responsive behavior
 By default, you don't have to specify block sizes in css. Element with the
@@ -135,7 +139,7 @@ Set frame (without animation)
 
 `parameters`
 - frame : Number - Frame number
-```
+```javascript
 sprite.setFrame(35);
 ```
 ### setReverse
@@ -143,7 +147,7 @@ Change the direction of the animation
 
 `parameters`
 - reverse : Bool - true to reverse, false to normal direction
-```
+```javascript
 sprite.setReverse(true);
 ```
 ### setOption
@@ -152,7 +156,7 @@ It sets one of the allowed  options (`frameTime`, `duration`, `fps`) on the fly
 `parameters`
 - option : String - Option name
 - value : Number - New value
-```
+```javascript
 sprite.setOption('frameTime', 40);
 ```
 

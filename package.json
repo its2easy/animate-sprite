@@ -9,7 +9,10 @@
   "scripts": {
     "build": "webpack --config config/webpack.prod.js && node config/copy-to-examples.js",
     "start": "webpack-dev-server --progress --config config/webpack.dev.js --open",
-    "test": "echo \"Error: no test specified\""
+    "test": "echo \"Error: no test specified\"",
+    "version": "npm run build && git add -A build",
+    "postversion": "git push && git push --tags",
+    "publish": "npm publish --access public"
   },
   "files": [
     "src",

@@ -1,5 +1,5 @@
 {
-  "name": "animate-sprite",
+  "name": "@its2easy/animate-sprite",
   "version": "1.0.0",
   "description": "Javascript plugin to animate frames from sprite image",
   "author": "Dmitry Kovalev",

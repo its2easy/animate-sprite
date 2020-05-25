@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Sprite test</title>
+
+    <style>
+        .sprite{
+            margin-left:  auto;
+            margin-right:  auto;
+            background-image: url("car.jpg");
+        }
+        .sprite1{
+            max-width: 600px;
+        }
+        .sprite2{
+            max-width: 600px;
+            /*height: 350px;*/
+            /*background-size: 7800px 1750px;*/
+            cursor: pointer;
+        }
+        @media (max-width: 991.98px) {
+            .sprite2{
+                width: auto;
+            }
+        }
+        @media (max-width: 575px) {
+            .btn-group{
+                flex-wrap: wrap;
+            }
+            .btn-group>.btn{
+                flex-grow: 0;
+            }
+        }
+    </style>
+
+</head>
+<body>
+
+
+
+<div class="container pt-4 pb-4">
+    <h1 class="text-center">animate-sprite example</h1>
+
+    <!--  CONTROLS-->
+    <div class="text-center">
+        <div class="block">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6 col-xl-4">
+                    <div class="btn-group mb-2" role="group">
+                        <button type="button" class="btn btn-success js-play">Play</button>
+                        <button type="button" class="btn btn-danger js-stop">Stop</button>
+                        <button type="button" class="btn btn-info js-next">Next</button>
+                        <button type="button" class="btn btn-info js-prev">Prev</button>
+                        <button type="button" class="btn btn-info js-reset">Reset</button>
+                        <button type="button" class="btn btn-info js-reverse">Reverse</button>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-5">
+                    <div class="form-group">
+                        <label for="formControlRange">Frames</label>
+                        <input class="form-control-range js-frames-input" id="formControlRange" max="61" min="1" type="range"
+                               value="1">
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-6 col-xl-3 js-option-block">
+                    <div class="input-group mb-2 mx-auto" style="max-width: 150px;">
+                        <input type="text" class="form-control" placeholder="15" value="15">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary js-set-frame" type="button">Set frame</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="input-group mb-2 mx-auto js-option-block" style="max-width: 230px;">
+                        <input type="text" class="form-control" placeholder="1000" value="1000">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary js-set-duration" type="button">Set duration (ms)</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="input-group mb-2 mx-auto js-option-block" style="max-width: 230px;">
+                        <input type="text" class="form-control" placeholder="45" value="45">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary js-set-frame-time" type="button">Set frame delay (ms)</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="input-group mb-2 mx-auto js-option-block" style="max-width: 150px;">
+                        <input type="text" class="form-control" placeholder="60" value="60">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary js-set-fps" type="button">Set fps</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--SPRITE BLOCK-->
+            <div id="sprite1" class="sprite sprite1"></div>
+            <!-- ============  -->
+        </div>
+
+        <!--SECOND EXAMPLE BLOCK -->
+        <div class="block mt-3">
+            <h2 class="text-center">Mouse hover</h2>
+            <div id="sprite2" class="sprite sprite2"></div>
+        </div>
+        <!-- ============  -->
+    </div>
+</div><!--/.container-->
+
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
+<script src="animate-sprite.min.js"></script>
+<script src="app.js"></script>
+
+
+</body>
+</html>

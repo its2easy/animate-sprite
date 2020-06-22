@@ -55,7 +55,12 @@ $(function () {
     $('.js-set-fps').on('click', function () {
         sprite1.setOption('fps', $(this).closest('.js-option-block').find('input').val());
     });
-
+    element.addEventListener('sprite:last-frame', function () {
+        console.log('last frame');
+    });
+    element.addEventListener('sprite:first-frame', function () {
+        console.log('first frame');
+    });
 
     // Second example
     var element2 = document.getElementById('sprite2');

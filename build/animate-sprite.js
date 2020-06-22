@@ -228,8 +228,9 @@ function init(node, options = {}) {
 
     if (!isOutOfRange(frame)) {
       // Valid frame
+      animateSprite(frame);
+      checkForEvents(currentFrame, frame);
       currentFrame = frame;
-      animateSprite(currentFrame);
     } else {
       // Out of range
       if (settings.loop) {
@@ -276,7 +277,7 @@ function init(node, options = {}) {
     const progress = (time - lastUpdate) / duration; //console.log(time - lastUpdate);
 
     const deltaFrames = progress * settings.frames; // Ex. 0.45 or 1.25
-    // Place for timing function
+    // A place for timing function
 
     if (deltaFrames >= 1) {
       // Animate only if we need to update 1 frame or more
@@ -298,6 +299,14 @@ function init(node, options = {}) {
     bgHeight = !settings.cols ? nodeHeight : Math.ceil(settings.frames / settings.cols) * nodeHeight;
     node.style.backgroundSize = "".concat(bgWidth, "px ").concat(bgHeight, "px");
     changeFrame(1);
+  }
+
+  function checkForEvents(prevFrame, nextFrame) {
+    if (prevFrame === settings.frames - 1 && nextFrame === settings.frames) {
+      node.dispatchEvent(new Event('sprite:last-frame'));
+    } else if (prevFrame === 2 && nextFrame === 1) {
+      node.dispatchEvent(new Event('sprite:first-frame'));
+    }
   }
 
   function initPlugin() {
@@ -399,34 +408,46 @@ function init(node, options = {}) {
     isAnimating = true;
     lastUpdate = performance.now();
     requestAnimationFrame(animate);
+    return this;
   };
 
   plugin.stop = function () {
     isAnimating = false;
+    return this;
+  };
+
+  plugin.toggle = function () {
+    if (!isAnimating) plugin.play();else plugin.stop();
+    return this;
   };
 
   plugin.next = function () {
     plugin.stop();
     changeFrame(currentFrame + 1);
+    return this;
   };
 
   plugin.prev = function () {
     plugin.stop();
     changeFrame(currentFrame - 1);
+    return this;
   };
 
   plugin.reset = function () {
     plugin.stop();
     changeFrame(1);
+    return this;
   };
 
   plugin.setFrame = function (frame) {
     plugin.stop();
     changeFrame(frame);
+    return this;
   };
 
   plugin.setReverse = function (reverse = true) {
     settings.reverse = !!reverse;
+    return this;
   };
 
   plugin.getCurrentFrame = () => currentFrame;
@@ -445,6 +466,8 @@ function init(node, options = {}) {
         plugin.play();
       }
     }
+
+    return this;
   };
 
   plugin.destroy = function () {

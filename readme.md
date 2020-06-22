@@ -16,6 +16,7 @@ frames and combine them in one image file (sprite).
 * [Usage](#usage)
 * [Options](#options)
 * [Methods](#methods)
+* [Events](#events)
 * [Browser support](#browser_support)
 * [License](#license)
 
@@ -172,6 +173,21 @@ Returns current frame number
 
 ### isAnimating
 Returns `true` if sprite is animating, else `false`
+
+## <a name="events"></a>Events
+
+#### sprite:last-frame
+fires after the last frame is set
+#### sprite:first-frame 
+fires after the first frame is set (when ```reverse``` 
+is ```true```)
+> Don't fire with ```draggable``` rotation
+```javascript
+var element = document.getElementById('sprite');
+element.addEventListener('sprite:last-frame', function () {
+    console.log('last frame');
+})
+```
 
 ## <a name="browser_support"></a>Browser support
 It supports browsers that have more than 1% usage and not dead

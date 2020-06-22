@@ -77,8 +77,9 @@ export function init(node, options = {}) {
     function changeFrame(frame){
         if ( frame === currentFrame ) return;
         if ( !isOutOfRange(frame) ){ // Valid frame
+            animateSprite(frame);
+            checkForEvents(currentFrame, frame);
             currentFrame = frame;
-            animateSprite(currentFrame);
         } else { // Out of range
             if (settings.loop) { // Loop, change frame and continue
                 changeFrame( Math.abs(Math.abs(frame) - settings.frames) ); // Correct frame
@@ -140,6 +141,13 @@ export function init(node, options = {}) {
             : Math.ceil( settings.frames / settings.cols ) * nodeHeight;
         node.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
         changeFrame(1);
+    }
+    function checkForEvents(prevFrame, nextFrame) {
+        if ( (prevFrame === settings.frames - 1) && (nextFrame === settings.frames) ){
+            node.dispatchEvent( new Event('sprite:last-frame') );
+        } else if ( (prevFrame === 2) && (nextFrame === 1) ) {
+            node.dispatchEvent( new Event('sprite:first-frame') );
+        }
     }
     function initPlugin(){
         duration = calculateDuration(settings.frameTime, settings.duration, settings.fps);

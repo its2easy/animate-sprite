@@ -70,12 +70,10 @@ $(function () {
         }
     );
     $('.sprite2').mouseenter(function () {
-        sprite2.setReverse(false);
-        sprite2.play();
+        sprite2.setReverse(false).play();
     });
     $('.sprite2').mouseleave (function () {
-        sprite2.setReverse(true);
-        sprite2.play();
+        sprite2.setReverse(true).play();
     });
 });
 

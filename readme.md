@@ -112,8 +112,9 @@ after initialization.
 same time, `frameTime` has higher priority, then `duration`, then `fps`.
 
 ## <a name="methods"></a>Methods
+>  Methods can be chained ```sprite.setReverse(true).play()```
 ### init
-Initializes an instance of a sprite
+Initializes and returns an instance of a sprite.
 
 `parameters`
 - element : NodeElement - dom element

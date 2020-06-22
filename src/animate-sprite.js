@@ -116,7 +116,7 @@ export function init(node, options = {}) {
         const progress = ( time - lastUpdate ) / duration;
         //console.log(time - lastUpdate);
         const deltaFrames = progress * settings.frames; // Ex. 0.45 or 1.25
-        // Place for timing function
+        // A place for timing function
 
         if ( deltaFrames >= 1) { // Animate only if we need to update 1 frame or more
             changeFrame(getNextFrame( Math.floor(deltaFrames) ));
@@ -237,32 +237,40 @@ export function init(node, options = {}) {
         isAnimating = true;
         lastUpdate = performance.now();
         requestAnimationFrame(animate);
+        return this;
     }
     plugin.stop = function(){
         isAnimating = false;
+        return this;
     }
     plugin.toggle = function(){
         if ( !isAnimating ) plugin.play();
         else plugin.stop();
+        return this;
     }
     plugin.next = function(){
         plugin.stop();
         changeFrame( currentFrame + 1 );
+        return this;
     }
     plugin.prev = function(){
         plugin.stop();
         changeFrame( currentFrame - 1 );
+        return this;
     }
     plugin.reset = function(){
         plugin.stop();
         changeFrame(1);
+        return this;
     }
     plugin.setFrame = function(frame){
         plugin.stop();
         changeFrame(frame);
+        return this;
     }
     plugin.setReverse = function(reverse = true){
         settings.reverse = !!reverse;
+        return this;
     }
     plugin.getCurrentFrame = () => currentFrame;
     plugin.isAnimating = () => isAnimating;
@@ -276,6 +284,7 @@ export function init(node, options = {}) {
                 plugin.play();
             }
         }
+        return this;
     };
     plugin.destroy = function () {
         removeSwipeEvents( node, swipeHandler, swipeEvents );

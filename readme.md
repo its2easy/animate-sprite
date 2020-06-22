@@ -78,8 +78,39 @@ sprite.play();
 import { init as spriteInit } from '@its2easy/animate-sprite';
 let sprite = spriteInit(element, options);
 ```
-> If ES modules are supported - untranspiled es6 code will be imported 
-
+> If ES modules are supported - untranspiled es6 code will be imported,
+> you should add it your build process. Example for webpack: 
+```javascript
+rules: [
+    {
+        test: /\.js$/,
+        exclude: /node_modules(?!(\/|\\)@its2easy)/,
+        use: {
+            loader: 'babel-loader',
+        }
+    }
+]
+```
+or
+```javascript
+rules: [
+    {
+        // basic js rule
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+            loader: 'babel-loader',
+        }
+    },
+    {
+        // additional rule
+        test: /\.js$/,
+        include: /node_modules(\/|\\)@its2easy/,
+        use: {
+            loader: 'babel-loader',
+    }
+]
+```
 ### Responsive behavior
 By default, you don't have to specify block sizes in css. Element with the
 sprite will take all available width and set its height based on width/height

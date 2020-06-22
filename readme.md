@@ -123,7 +123,10 @@ Initializes an instance of a sprite
 Starts animation
 
 ### stop
-Starts animation
+Stops animation
+
+### toggle
+Toggle between play and stop
 
 ### prev
 Animate to the previous frame

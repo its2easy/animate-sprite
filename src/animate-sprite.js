@@ -241,6 +241,10 @@ export function init(node, options = {}) {
     plugin.stop = function(){
         isAnimating = false;
     }
+    plugin.toggle = function(){
+        if ( !isAnimating ) plugin.play();
+        else plugin.stop();
+    }
     plugin.next = function(){
         plugin.stop();
         changeFrame( currentFrame + 1 );

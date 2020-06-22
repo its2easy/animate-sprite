@@ -22,6 +22,9 @@ $(function () {
     $('.js-stop').on('click', function () {
         sprite1.stop();
     });
+    $('.js-toggle').on('click', function () {
+        sprite1.toggle();
+    });
     $('.js-next').on('click', function () {
         sprite1.next();
     });

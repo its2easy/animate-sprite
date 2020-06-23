@@ -4,7 +4,7 @@
 
 Demo - [codepen](https://codepen.io/its2easy/pen/VwvVRed)
 
-**animate-sprite** is a lightweight library (5kb minified) which allows to animate a 
+**animate-sprite** is a lightweight library (6kb minified) which allows to animate a 
 sequence of frames that looks like 3d. It supports playing full animation
 sequence, rotate an image by the mouse and touch, autoplay, loop, 
 reverse and exposes an API to programmatically control the animation.
@@ -21,7 +21,7 @@ frames and combine them in one image file (sprite).
 * [License](#license)
 
 ## <a name="installation"></a>Installation
-### Script tag
+### Browser script tag
 Add with CDN link:
 ```html
 <script src="https://unpkg.com/@its2easy/animate-sprite"></script>

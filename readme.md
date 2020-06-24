@@ -1,6 +1,7 @@
 <h1 align="center">
    Animate Sprite
 </h1>
+
 ![npm (scoped)](https://img.shields.io/npm/v/@its2easy/animate-sprite)
 ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/min/@its2easy/animate-sprite)
 ![David](https://img.shields.io/david/its2easy/animate-sprite)

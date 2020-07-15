@@ -1,7 +1,7 @@
 import mergeObjects from './merge-objects'
 /**
  *
- * @param {HTMLElement} node - DOM Node
+ * @param {Element|HTMLElement} node - DOM Node
  * @param {Object} options - Options
  * @param {Number} options.width - Width of one frame
  * @param {Number} options.height - Height of one frame
@@ -127,6 +127,7 @@ export function init(node, options = {}) {
     }
 
     function calculateSizes(){
+        const wasAnimating = isAnimating;
         plugin.stop();
         widthHeightRatio = settings.width / settings.height;
         nodeWidth = node.offsetWidth;
@@ -140,7 +141,8 @@ export function init(node, options = {}) {
             ? nodeHeight
             : Math.ceil( settings.frames / settings.cols ) * nodeHeight;
         node.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
-        changeFrame(1);
+        if (wasAnimating) plugin.play();
+        else changeFrame(1);
     }
     function checkForEvents(prevFrame, nextFrame) {
         if ( (prevFrame === settings.frames - 1) && (nextFrame === settings.frames) ){

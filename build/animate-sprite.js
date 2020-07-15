@@ -152,7 +152,7 @@ __webpack_require__.d(__webpack_exports__, "init", function() { return /* bindin
 
 /**
  *
- * @param {HTMLElement} node - DOM Node
+ * @param {Element|HTMLElement} node - DOM Node
  * @param {Object} options - Options
  * @param {Number} options.width - Width of one frame
  * @param {Number} options.height - Height of one frame
@@ -289,6 +289,7 @@ function init(node, options = {}) {
   }
 
   function calculateSizes() {
+    const wasAnimating = isAnimating;
     plugin.stop();
     widthHeightRatio = settings.width / settings.height;
     nodeWidth = node.offsetWidth;
@@ -298,7 +299,7 @@ function init(node, options = {}) {
     bgWidth = !settings.cols ? settings.frames * nodeWidth : settings.cols * nodeWidth;
     bgHeight = !settings.cols ? nodeHeight : Math.ceil(settings.frames / settings.cols) * nodeHeight;
     node.style.backgroundSize = "".concat(bgWidth, "px ").concat(bgHeight, "px");
-    changeFrame(1);
+    if (wasAnimating) plugin.play();else changeFrame(1);
   }
 
   function checkForEvents(prevFrame, nextFrame) {

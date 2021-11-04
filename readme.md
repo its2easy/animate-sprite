@@ -116,17 +116,17 @@ rules: [
 ]
 ```
 #### All available versions:
-#####umd build:
+##### umd build:
 
 `@its2easy/animate-sprite/build/animate-sprite.umd.min.js` - default for browser script tag and legacy bundlers
 
-#####esm builds processed whit babel:
+##### esm builds processed whit babel:
 
 `@its2easy/animate-sprite/build/animate-sprite.esm.min.js` - default for webpack and module environments
 
 `@its2easy/animate-sprite/build/animate-sprite.esm.js`
 
-#####esm builds without babel transformation:
+##### esm builds without babel transformation:
 
 `@its2easy/animate-sprite/build/untranspiled/animate-sprite.esm.min.js`
 

@@ -1,7 +1,12 @@
 >1%
-last 2 edge versions
-last 2 and_chr versions
-not ie >= 10
-not ie_mob >= 10
-not op_mini all
+last 2 major versions
 not dead
+not iOS < 13
+iOS >= 13
+not Safari < 13
+Safari >= 13
+not Explorer <= 11
+not op_mini all
+not op_mob > 1
+not kaios > 1
+not baidu > 1

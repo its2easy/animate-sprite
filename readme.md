@@ -8,7 +8,7 @@
 
 Demo - [codepen](https://codepen.io/its2easy/pen/VwvVRed)
 
-**animate-sprite** is a lightweight library (6kb minified) which allows to animate a 
+**animate-sprite** is a lightweight library (5.5kb minified) which allows to animate a 
 sequence of frames that looks like 3d. It supports playing full animation
 sequence, rotate an image by the mouse and touch, autoplay, loop, 
 reverse and exposes an API to programmatically control the animation.
@@ -28,13 +28,9 @@ frames and combine them in one image file (sprite).
 ### Browser script tag
 Add with CDN link:
 ```html
-<script src="https://unpkg.com/@its2easy/animate-sprite"></script>
+<script src="https://cdn.jsdelivr.net/npm/@its2easy/animate-sprite"></script>
 ```
-Or download <a href="build/animate-sprite.min.js" download>minified version</a> 
-from repository and include in html:
-```html
-<script src="animate-sprite.min.js"></script>
-```
+
 ### npm
 ```
 npm i @its2easy/animate-sprite --save
@@ -82,13 +78,17 @@ sprite.play();
 import { init as spriteInit } from '@its2easy/animate-sprite';
 let sprite = spriteInit(element, options);
 ```
-> If ES modules are supported - untranspiled es6 code will be imported,
-> you should add it your build process. Example for webpack: 
+It is possible to directly import untranspiled esm version:
+```javascript
+import { init as spriteInit } from '@its2easy/animate-sprite/build/untranspiled/animate-sprite.esm.min.js'; //or animate-sprite.esm.js
+let sprite = spriteInit(element, options);
+```
+> :warning: You should probably add it to your build process if you use untranspiled version. Example for webpack:
 ```javascript
 rules: [
     {
         test: /\.js$/,
-        exclude: /node_modules(?!(\/|\\)@its2easy)/,
+        exclude: /node_modules(?!(\/|\\)@its2easy(\/|\\)animate-sprite(\/|\\)build)/,
         use: {
             loader: 'babel-loader',
         }
@@ -109,12 +109,29 @@ rules: [
     {
         // additional rule
         test: /\.js$/,
-        include: /node_modules(\/|\\)@its2easy/,
+        include: /node_modules(\/|\\)@its2easy(\/|\\)animate-sprite(\/|\\)build/,
         use: {
             loader: 'babel-loader',
     }
 ]
 ```
+#### All available versions:
+#####umd build:
+
+`@its2easy/animate-sprite/build/animate-sprite.umd.min.js` - default for browser script tag and legacy bundlers
+
+#####esm builds processed whit babel:
+
+`@its2easy/animate-sprite/build/animate-sprite.esm.min.js` - default for webpack and module environments
+
+`@its2easy/animate-sprite/build/animate-sprite.esm.js`
+
+#####esm builds without babel transformation:
+
+`@its2easy/animate-sprite/build/untranspiled/animate-sprite.esm.min.js`
+
+`@its2easy/animate-sprite/build/untranspiled/animate-sprite.esm.js`
+
 ### Responsive behavior
 By default, you don't have to specify block sizes in css. Element with the
 sprite will take all available width and set its height based on width/height
@@ -235,12 +252,9 @@ element.addEventListener('sprite:drag-end', function (event) {
 ```
 
 ## <a name="browser_support"></a>Browser support
-It supports browsers that have more than 1% usage and not dead
-* latest versions of Chrome, android Chrome, Firefox
-* Safari 13+, 
-* iOS Safari 12.2+, 
-* Edge 18+
-* some rare browsers
+* latest versions of Chrome, android Chrome, Edge, Firefox
+* Safari 13+
+* iOS Safari 13+
 
 ## <a name="license"></a>License
 Animate Sprite is provided under the [MIT License](https://opensource.org/licenses/MIT)

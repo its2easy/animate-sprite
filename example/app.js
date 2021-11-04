@@ -61,6 +61,15 @@ $(function () {
     element.addEventListener('sprite:first-frame', function () {
         console.log('first frame');
     });
+    element.addEventListener('sprite:drag-start', function () {
+        console.log('sprite:drag-start');
+    });
+    element.addEventListener('sprite:drag-change', function () {
+        console.log('sprite:drag-change');
+    });
+    element.addEventListener('sprite:drag-end', function (e) {
+        console.log('sprite:drag-end');
+    });
 
     // Second example
     var element2 = document.getElementById('sprite2');

@@ -202,6 +202,9 @@ export function init(node, options = {}) {
         document.body.style.cursor = 'grabbing';
         swipeObject.prevX = swipeObject.curX;
         swipeObject.prevY = swipeObject.curY;
+        node.dispatchEvent(new CustomEvent('sprite:drag-start',
+            {detail: {frame: currentFrame}}
+        ));
     }
     function swipeMove(){
         const direction = swipeDirection();
@@ -219,6 +222,9 @@ export function init(node, options = {}) {
         // so fullwidth swipe is always rotate sprite for 1 turn
         swipePixelsCorrection = swipeLength - (swipeThreshold * deltaFrames);
         changeFrame(getNextFrame( deltaFrames, (direction !== 'left') ));
+        node.dispatchEvent(new CustomEvent('sprite:drag-change',
+            {detail: {frame: currentFrame}}
+        ));
     }
     function swipeEnd(){
         //if ( swipeObject.curX === undefined ) return; // there is no x coord on touch end
@@ -226,6 +232,9 @@ export function init(node, options = {}) {
         isSwiping = false;
         node.style.cursor = 'grab';
         document.body.style.cursor = 'default';
+        node.dispatchEvent(new CustomEvent('sprite:drag-end',
+            {detail: {frame: currentFrame}}
+        ));
     }
     function swipeDirection(){
         let xDist, yDist, r, swipeAngle;

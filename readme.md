@@ -216,11 +216,21 @@ fires after the last frame is set
 #### sprite:first-frame 
 fires after the first frame is set (when ```reverse``` 
 is ```true```)
-> Don't fire with ```draggable``` rotation
+
+#### sprite:drag-start
+Fires when user starts dragging. Frame number is in `event.detail.frame`
+
+#### sprite:drag-change
+Fires on every frame change while dragging. Frame number is in `event.detail.frame`
+
+#### sprite:drag-end
+Fires when user stops dragging. Frame number is in `event.detail.frame`
+
+Example:
 ```javascript
 var element = document.getElementById('sprite');
-element.addEventListener('sprite:last-frame', function () {
-    console.log('last frame');
+element.addEventListener('sprite:drag-end', function (event) {
+    console.log(event.detail.frame);
 })
 ```
 

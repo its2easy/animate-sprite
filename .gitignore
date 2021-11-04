@@ -15,3 +15,5 @@ yarn-error.log*
 Thumbs.db
 ehthumbs.db
 *.lnk
+example/animate-sprite*.js
+example/animate-sprite*.map

@@ -74,8 +74,8 @@ export function init(node, options = {}) {
     function animateSprite(frame) {
         node.style.backgroundPosition = calculatePosition(frame);
     }
-    function changeFrame(frame){
-        if ( frame === currentFrame ) return;
+    function changeFrame(frame, force = false){
+        if ( frame === currentFrame && !force ) return;
         if ( !isOutOfRange(frame) ){ // Valid frame
             animateSprite(frame);
             checkForEvents(currentFrame, frame);
@@ -142,7 +142,7 @@ export function init(node, options = {}) {
             : Math.ceil( settings.frames / settings.cols ) * nodeHeight;
         node.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
         if (wasAnimating) plugin.play();
-        else changeFrame(1);
+        else changeFrame(currentFrame, true);
     }
     function checkForEvents(prevFrame, nextFrame) {
         if ( (prevFrame === settings.frames - 1) && (nextFrame === settings.frames) ){

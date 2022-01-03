@@ -1,6 +1,7 @@
-import mergeObjects from './merge-objects'
+import { validateParameters, getSettings } from "./settings";
+import DragInput from "./DragInput";
+
 /**
- *
  * @param {Element|HTMLElement} node - DOM Node
  * @param {Object} options - Options
  * @param {Number} options.width - Width of one frame
@@ -14,6 +15,10 @@ import mergeObjects from './merge-objects'
  * @param {Number|Boolean} [options.duration] - ms, total time, alternative to frameTime
  * @param {Number|Boolean} [options.fps = 24] - fps, alternative to frameTime
  * @param {Number|Boolean} [options.draggable = false] - Draggable by mouse or touch
+ * @param {String} [options.touchScrollMode = "pageScrollTimer"] - Page scroll behavior with touch events
+ * (preventPageScroll,allowPageScroll, pageScrollTimer)
+ * @param {Number} [options.pageScrollTimerDelay = 1500] - Time in ms when touch scroll will be disabled during interaction
+ * if options.touchScrollMode = "pageScrollTimer"
  * @returns {Object}
  * @example
  *
@@ -25,61 +30,51 @@ import mergeObjects from './merge-objects'
  *                 frames: 20,
  *                 frameTime: 45,
  *                 loop: true
- *              }readme.md
+ *              }
  */
 export function init(node, options = {}) {
-    if ( !(node instanceof HTMLElement || node instanceof Element || node instanceof HTMLDocument)) {
-        throw new TypeError('Node is required');
+    validateParameters(node, options);
+    let settings = getSettings(node, options);
+
+    let data = {
+        currentFrame: 1,
+        isAnimating: false,
+        duration: null, // One animation cycle duration
+        lastUpdate: null,
+        isSwiping: false,
+        nodeWidth: null,
+        nodeHeight: null,
+        widthHeightRatio: null,
+        bgWidth: null,
+        bgHeight: null,
+        element: node,
+        pluginApi: {}
     }
+    // Classes
+    let dragInput;
 
-    // Setup settings
-    let inlineSettings = fillInlineSettings( node,
-        ['width', 'height', 'frames', 'cols', 'loop', 'frameTime', 'duration', 'fps', 'reverse', 'autoplay', 'draggable']
-    );
 
-    let defaultSettings = {
-        width: 100,
-        height: 100,
-        frames: 24,
-        cols: false,
-        loop: false,
-        frameTime: false,
-        duration: false,
-        fps: 24,
-        reverse: false,
-        autoplay: false,
-        draggable: false
+    function initPlugin(){
+        data.duration = calculateDuration(settings.frameTime, settings.duration, settings.fps);
+        data.lastUpdate = performance.now();
+
+        calculateSizes();
+        addResizeHandler(calculateSizes);
+
+        if ( settings.autoplay ) plugin.play();
+        if ( settings.draggable ) toggleDrag(true);
     }
-    //let settings = Object.assign(defaultSettings, options, inlineSettings);
-    let settings = mergeObjects(defaultSettings, options, inlineSettings);
-
-    let currentFrame = 1,
-        isAnimating = false,
-        duration, // One animation cycle duration
-        lastUpdate,
-        isSwiping = false,
-        swipeObject = {},
-        swipeThreshold,
-        swipePixelsCorrection = 0,
-        nodeWidth,
-        nodeHeight,
-        widthHeightRatio,
-        bgWidth,
-        bgHeight,
-        plugin = {}; // Public object
-
-    const swipeEvents = ['mousedown', 'mousemove', 'mouseup', 'touchstart', 'touchmove', 'touchend', 'touchcancel'];
 
     // Private functions
     function animateSprite(frame) {
         node.style.backgroundPosition = calculatePosition(frame);
     }
     function changeFrame(frame, force = false){
-        if ( frame === currentFrame && !force ) return;
+        if ( frame === data.currentFrame && !force ) return;
         if ( !isOutOfRange(frame) ){ // Valid frame
             animateSprite(frame);
-            checkForEvents(currentFrame, frame);
-            currentFrame = frame;
+            checkForEvents(data.currentFrame, frame);
+            data.currentFrame = frame;
         } else { // Out of range
             if (settings.loop) { // Loop, change frame and continue
                 changeFrame( Math.abs(Math.abs(frame) - settings.frames) ); // Correct frame
@@ -92,7 +87,7 @@ export function init(node, options = {}) {
     }
     function getNextFrame(deltaFrames, reverse){
         if ( reverse === undefined ) reverse = settings.reverse;
-        return  (reverse) ? currentFrame - deltaFrames : currentFrame + deltaFrames;
+        return  (reverse) ? data.currentFrame - deltaFrames : data.currentFrame + deltaFrames;
     }
     function isOutOfRange(frame){
         return ( frame <= 0 || frame > settings.frames );
@@ -103,8 +98,8 @@ export function init(node, options = {}) {
         if ( !settings.cols ){ // Single row sprite
             xPadding = (frame - 1) * nodeWidth;
         } else { // Multiline sprite
-            xPadding = ( ( (frame - 1) % settings.cols)  ) * nodeWidth;
-            yPadding = Math.floor( (frame - 1) / settings.cols ) * nodeHeight;
+            xPadding = ( ( (frame - 1) % settings.cols)  ) * data.nodeWidth;
+            yPadding = Math.floor( (frame - 1) / settings.cols ) * data.nodeHeight;
         }
         return `-${xPadding}px -${yPadding}px`;
     }
@@ -114,35 +109,35 @@ export function init(node, options = {}) {
         else return  ( settings.frames / fps ) * 1000;
     }
     function animate(time){
-        const progress = ( time - lastUpdate ) / duration;
+        const progress = ( time - data.lastUpdate ) / data.duration;
         //console.log(time - lastUpdate);
         const deltaFrames = progress * settings.frames; // Ex. 0.45 or 1.25
         // A place for timing function
 
         if ( deltaFrames >= 1) { // Animate only if we need to update 1 frame or more
             changeFrame(getNextFrame( Math.floor(deltaFrames) ));
-            lastUpdate = performance.now();
+            data.lastUpdate = performance.now();
         }
-        if ( isAnimating ) requestAnimationFrame(animate);
+        if ( data.isAnimating ) requestAnimationFrame(animate);
     }
 
     function calculateSizes(){
-        const wasAnimating = isAnimating;
+        const wasAnimating = data.isAnimating;
         plugin.stop();
-        widthHeightRatio = settings.width / settings.height;
-        nodeWidth = node.offsetWidth;
-        nodeHeight = nodeWidth / widthHeightRatio;
-        node.style.height = nodeHeight + "px";
-        swipeThreshold = nodeWidth / settings.frames;
-        bgWidth =  ( !settings.cols )
-            ? settings.frames * nodeWidth
-            : settings.cols * nodeWidth;
-        bgHeight = ( !settings.cols )
-            ? nodeHeight
-            : Math.ceil( settings.frames / settings.cols ) * nodeHeight;
-        node.style.backgroundSize = `${bgWidth}px ${bgHeight}px`;
+        data.widthHeightRatio = settings.width / settings.height;
+        data.nodeWidth = node.offsetWidth;
+        data.nodeHeight = data.nodeWidth / data.widthHeightRatio;
+        node.style.height = data.nodeHeight + "px";
+        data.bgWidth =  ( !settings.cols )
+            ? settings.frames * data.nodeWidth
+            : settings.cols * data.nodeWidth;
+        data.bgHeight = ( !settings.cols )
+            ? data.nodeHeight
+            : Math.ceil( settings.frames / settings.cols ) * data.nodeHeight;
+        node.style.backgroundSize = `${data.bgWidth}px ${data.bgHeight}px`;
         if (wasAnimating) plugin.play();
-        else changeFrame(currentFrame, true);
+        else changeFrame(data.currentFrame, true);
+        if ( dragInput ) dragInput.updateThreshold()
     }
     function checkForEvents(prevFrame, nextFrame) {
         if ( (prevFrame === settings.frames - 1) && (nextFrame === settings.frames) ){
@@ -151,130 +146,47 @@ export function init(node, options = {}) {
             node.dispatchEvent( new Event('sprite:first-frame') );
         }
     }
-    function initPlugin(){
-        duration = calculateDuration(settings.frameTime, settings.duration, settings.fps);
-        lastUpdate = performance.now();
 
-        calculateSizes();
-        addResizeHandler(calculateSizes);
-
-        if ( settings.autoplay ) plugin.play();
-        if ( settings.draggable ) {
-            setupSwipeEvents(node, swipeHandler, swipeEvents);
-            node.style.cursor = 'grab';
+    function toggleDrag(enable = true){
+        if (enable) {
+            if ( !dragInput ) dragInput = new DragInput({
+                data,
+                settings,
+                changeFrame,
+                getNextFrame: getNextFrame
+            });
+            dragInput.enableDrag();
+        } else {
+            if (dragInput) dragInput.disableDrag();
         }
     }
 
-    //===================== SWIPE ROTATION ====================//
-    function swipeHandler(event){
-        let touches;
-        if ( event.touches !== undefined && event.touches.length ) touches = event.touches;
-        swipeObject.curX = (touches) ? touches[0].pageX : event.clientX;
-        swipeObject.curY = (touches) ? touches[0].pageY : event.clientY;
-
-        switch (event.type){
-            case 'mousedown':
-            case 'touchstart':
-                if ( event.type === 'touchstart') event.preventDefault();
-                document.addEventListener('mouseup', swipeHandler);
-                document.addEventListener('mousemove', swipeHandler);
-                swipeStart();
-                break;
-            case 'mousemove':
-            case 'touchmove':
-                if ( event.type === 'touchmove') event.preventDefault();
-                if ( isSwiping ) swipeMove();
-                break;
-            case 'mouseup':
-            case 'touchend':
-            case 'touchcancel':
-                if ( event.type === 'touchend' || event.type === 'touchcancel') event.preventDefault();
-                document.removeEventListener('mouseup', swipeHandler);
-                document.removeEventListener('mousemove', swipeHandler);
-                swipeEnd();
-                break;
-        }
-    }
-    function swipeStart(){
-        isAnimating = false;
-        isSwiping = true;
-        node.style.cursor = 'grabbing';
-        document.body.style.cursor = 'grabbing';
-        swipeObject.prevX = swipeObject.curX;
-        swipeObject.prevY = swipeObject.curY;
-        node.dispatchEvent(new CustomEvent('sprite:drag-start',
-            {detail: {frame: currentFrame}}
-        ));
-    }
-    function swipeMove(){
-        const direction = swipeDirection();
-        swipeObject.prevY = swipeObject.curY; // Update Y to get right angle
-
-        const swipeLength = Math.round( Math.abs(swipeObject.curX - swipeObject.prevX) ) + swipePixelsCorrection;
-        if ( swipeLength <= swipeThreshold) return; // Ignore if less than 1 frame
-        if ( direction !== 'left' && direction !== 'right') return; // Ignore vertical directions
-        swipeObject.prevX = swipeObject.curX;
-
-        const progress = swipeLength / nodeWidth;
-        const deltaFrames = Math.floor(progress * settings.frames);
-        // Add pixels to the next swipeMove if frames equivalent of swipe is not an integer number,
-        // e.g one frame is 10px, swipeLength is 13px, we change 1 frame and add 3px to the next swipe,
-        // so fullwidth swipe is always rotate sprite for 1 turn
-        swipePixelsCorrection = swipeLength - (swipeThreshold * deltaFrames);
-        changeFrame(getNextFrame( deltaFrames, (direction !== 'left') ));
-        node.dispatchEvent(new CustomEvent('sprite:drag-change',
-            {detail: {frame: currentFrame}}
-        ));
-    }
-    function swipeEnd(){
-        //if ( swipeObject.curX === undefined ) return; // there is no x coord on touch end
-        swipeObject = {};
-        isSwiping = false;
-        node.style.cursor = 'grab';
-        document.body.style.cursor = 'default';
-        node.dispatchEvent(new CustomEvent('sprite:drag-end',
-            {detail: {frame: currentFrame}}
-        ));
-    }
-    function swipeDirection(){
-        let xDist, yDist, r, swipeAngle;
-        xDist = swipeObject.prevX - swipeObject.curX;
-        yDist = swipeObject.prevY - swipeObject.curY;
-        r = Math.atan2(yDist, xDist);
-        swipeAngle = Math.round(r * 180 / Math.PI);
-        if (swipeAngle < 0) swipeAngle = 360 - Math.abs(swipeAngle);
-        if ( (swipeAngle >= 0 && swipeAngle <= 60) || (swipeAngle <= 360 && swipeAngle >= 300 )) return 'left';
-        else if ( swipeAngle >= 120 && swipeAngle <= 240 ) return 'right';
-        else if ( swipeAngle >= 241 && swipeAngle <= 299 ) return 'bottom';
-        else return 'up';
-    }
-    //===================== END SWIPE ====================//
-
-    // Public API
+    // Public API'
+    let plugin = {};
     plugin.play = function(){
-        if ( isAnimating ) return;
-        isAnimating = true;
-        lastUpdate = performance.now();
+        if ( data.isAnimating ) return;
+        data.isAnimating = true;
+        data.lastUpdate = performance.now();
         requestAnimationFrame(animate);
         return this;
     }
     plugin.stop = function(){
-        isAnimating = false;
+        data.isAnimating = false;
         return this;
     }
     plugin.toggle = function(){
-        if ( !isAnimating ) plugin.play();
+        if ( !data.isAnimating ) plugin.play();
         else plugin.stop();
         return this;
     }
     plugin.next = function(){
         plugin.stop();
-        changeFrame( currentFrame + 1 );
+        changeFrame( data.currentFrame + 1 );
         return this;
     }
     plugin.prev = function(){
         plugin.stop();
-        changeFrame( currentFrame - 1 );
+        changeFrame( data.currentFrame - 1 );
         return this;
     }
     plugin.reset = function(){
@@ -291,14 +203,14 @@ export function init(node, options = {}) {
         settings.reverse = !!reverse;
         return this;
     }
-    plugin.getCurrentFrame = () => currentFrame;
-    plugin.isAnimating = () => isAnimating;
+    plugin.getCurrentFrame = () => data.currentFrame;
+    plugin.isAnimating = () => data.isAnimating;
     plugin.setOption = function (option, value) {
         if ( option === "frameTime" || option === "duration" || option === "fps" ) {
             settings.frameTime = settings.duration = settings.fps = false; // Reset
             settings[option] = +value;
-            duration = calculateDuration(settings.frameTime, settings.duration, settings.fps); // Recalculate
-            if ( isAnimating ) {
+            data.duration = calculateDuration(settings.frameTime, settings.duration, settings.fps); // Recalculate
+            if ( data.isAnimating ) {
                 plugin.stop();
                 plugin.play();
             }
@@ -306,50 +218,21 @@ export function init(node, options = {}) {
         return this;
     };
     plugin.destroy = function () {
-        removeSwipeEvents( node, swipeHandler, swipeEvents );
+        //removeSwipeEvents( node, swipeHandler, swipeEvents );
         removeResizeHandler( calculateSizes );
     }
+    data.pluginApi = plugin;
 
     initPlugin();
     return plugin;
 }
 
-/**
- * Returns object with data-* settings
- *
- * @param {HTMLElement} node
- * @param {Array<string>} list
- * @returns {Object}
- */
-function fillInlineSettings(node, list) {
-    let result = {};
-    list.forEach( (value) => {
-        if (typeof node.dataset[value.toLowerCase()] !== 'undefined') {
-            let inlineValue = node.dataset[value.toLowerCase()];
-            if ( inlineValue === "true" || inlineValue === '') inlineValue = true;
-            else if ( inlineValue === "false") inlineValue = false;
-            result[value] = inlineValue;
-        }
-    });
-    return result;
-}
 
 function addResizeHandler(cb) {
     window.addEventListener("resize", cb); // todo add debouncing
 }
 function removeResizeHandler(cb) {
     window.removeEventListener("resize", cb);
-}
-
-function setupSwipeEvents(node, swipeHandler, swipeEvents) {
-    swipeEvents.forEach( (value) => {
-        node.addEventListener(value, swipeHandler);
-    })
-}
-function removeSwipeEvents(node, swipeHandler, swipeEvents) {
-    swipeEvents.forEach( (value) => {
-        node.removeEventListener(value, swipeHandler);
-    })
 }
 
 

@@ -5,7 +5,7 @@
  * @param {Object} firstSource
  * @returns {Object}
  */
-export default function(target, firstSource) {
+export function mergeObjects(target, firstSource) {
     if (target === undefined || target === null) {
         throw new TypeError('Cannot convert first argument to object');
     }

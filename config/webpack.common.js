@@ -1,7 +1,5 @@
 const path = require('path');
-
-const LIB_FILE_NAME = 'animate-sprite';
-const LIB_NAME = 'animateSprite';
+const { LIB_FILE_NAME, LIB_NAME } = require( './shared');
 
 const config = {
     entry: path.join(__dirname, `../src/${LIB_FILE_NAME}.js`),

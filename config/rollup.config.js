@@ -2,9 +2,9 @@ import { defineConfig } from 'rollup';
 import { terser } from "rollup-plugin-terser";
 import { babel } from '@rollup/plugin-babel';
 
+const { LIB_FILE_NAME } = require( './shared');
 const banner = require("./banner");
 const bannerWithComments = "/*!\n" + banner + "\n*/";
-const LIB_FILE_NAME = 'animate-sprite';
 
 export default defineConfig([
     { // Transpiled bundle

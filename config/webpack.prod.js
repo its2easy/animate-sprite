@@ -22,17 +22,4 @@ module.exports = [
             new CleanWebpackPlugin(),
         ],
     }),
-    // merge(common, { // Not minified
-    //     mode: 'production',
-    //     devtool: 'source-map',
-    //     plugins: [
-    //         new webpack.BannerPlugin(banner)
-    //     ],
-    //     output: {
-    //         filename: 'animate-sprite.js',
-    //     },
-    //     optimization: {
-    //         minimize: false
-    //     }
-    // })
 ];

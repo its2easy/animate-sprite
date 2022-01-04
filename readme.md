@@ -44,7 +44,7 @@ Create an element with background
 Initialize with options
 ```javascript
 var element = document.getElementById('sprite');
-var sprite = animateSprite.init(element,
+var sprite = new AnimateSprite(element,
     {
             width: 800, /* required */
             height: 450, /* required */
@@ -68,20 +68,19 @@ Or with inline options
 ```
 ```javascript
 var element = document.getElementById('sprite');
-var sprite = animateSprite.init(element);
+var sprite = new AnimateSprite(element);
 sprite.play();
 ```
 > Inline options have higher priority
 
 ### Usage with bundlers
 ```javascript
-import { init as spriteInit } from '@its2easy/animate-sprite';
-let sprite = spriteInit(element, options);
+import AnimateSprite from '@its2easy/animate-sprite';
+let sprite = new AnimateSprite(element, options);
 ```
 It is possible to directly import untranspiled esm version:
 ```javascript
-import { init as spriteInit } from '@its2easy/animate-sprite/build/untranspiled/animate-sprite.esm.min.js'; //or animate-sprite.esm.js
-let sprite = spriteInit(element, options);
+import AnimateSprite from '@its2easy/animate-sprite/build/untranspiled/animate-sprite.esm.min.js'; //or animate-sprite.esm.js
 ```
 > :warning: You should probably add it to your build process if you use untranspiled version. Example for webpack:
 ```javascript

@@ -4,13 +4,14 @@ import { babel } from '@rollup/plugin-babel';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import bundleSize from 'rollup-plugin-bundle-size';
+
 const { LIB_FILE_NAME } = require( './shared');
 const banner = require("./banner");
 const bannerWithComments = "/*!\n" + banner + "\n*/";
 
 export default defineConfig([
     { // Transpiled bundle
-        input: `./src/${LIB_FILE_NAME}.js`,
+        input: `./src/index.js`,
         plugins: [
             nodeResolve(),
             commonjs(),
@@ -37,7 +38,7 @@ export default defineConfig([
         ],
     },
     { // Untranspiled bundle
-        input: `./src/${LIB_FILE_NAME}.js`,
+        input: `./src/index.js`,
         plugins: [
             // nodeResolve(),
             // commonjs(),

@@ -4,7 +4,7 @@
   "description": "Javascript plugin to animate frames from sprite image",
   "author": "Dmitry Kovalev",
   "license": "MIT",
-  "main": "build/animate-sprite.min.js",
+  "main": "build/animate-sprite.esm.min.js",
   "module": "build/animate-sprite.esm.min.js",
   "publishConfig": {
     "access": "public"

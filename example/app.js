@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // First example
     let element = document.getElementById('sprite1');
-    let sprite1 = animateSprite.init(element,
+    let sprite1 = new AnimateSprite(element,
         {
             width: 600,
             height: 350,

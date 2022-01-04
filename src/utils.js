@@ -28,3 +28,17 @@ export function mergeObjects(target, firstSource) {
     }
     return to;
 }
+
+export function isOutOfRange(frame, frames){
+    return ( frame <= 0 || frame > frames );
+}
+
+export function normalizeFrameNumber(frameNumber, totalImages){
+    frameNumber = Math.floor(frameNumber);
+    if (frameNumber <= 0) {
+        return 1;
+    } else if (frameNumber > totalImages) {
+        return totalImages;
+    }
+    return frameNumber;
+}

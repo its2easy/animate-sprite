@@ -1,7 +1,9 @@
 import { defineConfig } from 'rollup';
 import { terser } from "rollup-plugin-terser";
 import { babel } from '@rollup/plugin-babel';
-
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import bundleSize from 'rollup-plugin-bundle-size';
 const { LIB_FILE_NAME } = require( './shared');
 const banner = require("./banner");
 const bannerWithComments = "/*!\n" + banner + "\n*/";
@@ -9,10 +11,15 @@ const bannerWithComments = "/*!\n" + banner + "\n*/";
 export default defineConfig([
     { // Transpiled bundle
         input: `./src/${LIB_FILE_NAME}.js`,
-        plugins: [babel({
-            babelHelpers: 'bundled',
-            exclude: "node_modules/**"
-        })],
+        plugins: [
+            nodeResolve(),
+            commonjs(),
+            babel({
+                babelHelpers: 'bundled',
+                exclude: "/node_modules/**"
+            }),
+            bundleSize()
+        ],
         output: [
             {
                 file: `./build/${LIB_FILE_NAME}.esm.js`,
@@ -31,6 +38,11 @@ export default defineConfig([
     },
     { // Untranspiled bundle
         input: `./src/${LIB_FILE_NAME}.js`,
+        plugins: [
+            // nodeResolve(),
+            // commonjs(),
+            bundleSize()
+        ],
         output: [
             {
                 file: `./build/untranspiled/${LIB_FILE_NAME}.esm.js`,

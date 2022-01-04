@@ -228,12 +228,6 @@ Returns `true` if sprite is animating, else `false`
 
 ## <a name="events"></a>Events
 
-#### sprite:last-frame
-fires after the last frame is set
-#### sprite:first-frame 
-fires after the first frame is set (when ```reverse``` 
-is ```true```)
-
 #### sprite:drag-start
 Fires when user starts dragging. Frame number is in `event.detail.frame`
 
@@ -253,8 +247,8 @@ element.addEventListener('sprite:drag-end', function (event) {
 
 ## <a name="browser_support"></a>Browser support
 * latest versions of Chrome, android Chrome, Edge, Firefox
-* Safari 13+
-* iOS Safari 13+
+* Safari 13.1+,
+* iOS Safari 13.4+
 
 ## <a name="license"></a>License
 Animate Sprite is provided under the [MIT License](https://opensource.org/licenses/MIT)

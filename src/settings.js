@@ -1,5 +1,3 @@
-import {mergeObjects} from "./utils";
-
 export function validateParameters(node, options){
     if ( !(node instanceof HTMLElement || node instanceof Element || node instanceof HTMLDocument)) {
         throw new TypeError('Node is required');

@@ -30,9 +30,12 @@ export default class Animation{
     }
     getNextFrame(deltaFrames, reverse = undefined){
         deltaFrames = Math.floor(deltaFrames); //just to be safe
-        // Handle reverse
+        // Handle reverse and inversion
         if ( reverse === undefined ) reverse = this.#settings.reverse;
-        let newFrameNumber = (reverse) ? this.#data.currentFrame - deltaFrames : this.#data.currentFrame + deltaFrames;
+
+        let newFrameNumber = (reverse === this.#settings.inversion) // true&&true and false&false mean usual direction (1..last)
+            ? this.#data.currentFrame + deltaFrames
+            : this.#data.currentFrame - deltaFrames;
 
         // Handle loop
         if (this.#settings.loop) { // loop and outside of the frames

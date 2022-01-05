@@ -14,6 +14,7 @@ import Animation from "./Animation";
  * @param {Number|Boolean} [options.cols=false] - Number of cols if more than 1 row
  * @param {Boolean} [options.loop=false] - Whether to start a new cycle at the end
  * @param {Boolean} [options.reverse=false] - Reverse direction
+ * @param {Boolean} [options.inversion=false] - Inversion
  * @param {Boolean} [options.autoplay=false] - Autoplay
  * @param {Number|Boolean} [options.frameTime] - ms, time between frames
  * @param {Number|Boolean} [options.duration] - ms, total time, alternative to frameTime

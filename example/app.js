@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", function() {
             fps: 45,
             loop: true,
             draggable: true,
-            //touchScrollMode: "pageScrollTimer"
+            //touchScrollMode: "pageScrollTimer",
+            inversion: true,
         }
     );
     setupControls(sprite1);

@@ -22,6 +22,7 @@ const defaultSettings = {
     duration: false,
     fps: 24,
     reverse: false,
+    inversion: false,
     autoplay: false,
     draggable: false,
     touchScrollMode: "pageScrollTimer",

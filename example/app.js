@@ -11,11 +11,13 @@ document.addEventListener("DOMContentLoaded", function() {
             //duration: 1000,
             fps: 45,
             loop: true,
-            draggable: true
+            draggable: true,
+            //touchScrollMode: "pageScrollTimer"
         }
     );
     setupControls(sprite1);
     setupEvents(element);
+    //sprite1.setFrame(30).setReverse(true).playTo(45);
 
     // Controls
     function setupControls(sprite){

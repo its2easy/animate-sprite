@@ -3,7 +3,7 @@ import { normalizeFrameNumber } from "./utils";
 import DragInput from "./DragInput";
 import Animation from "./Animation";
 
-//todo add inversion,
+//todo add inversion
 
 /**
  * @param {Element|HTMLElement} node - DOM Node
@@ -152,6 +152,30 @@ export default class AnimateSprite {
         this.stop();
         this.#changeFrame( this.#animation.getNextFrame(1, !this.#settings.reverse) );
         return this;
+    }
+    /**
+     * Starts the animation. which plays until the specified frame number
+     * @param {Number} frameNumber - Target frame number
+     * @returns {AnimateSprite} - plugin instance
+     */
+    playTo(frameNumber){
+        frameNumber = normalizeFrameNumber(frameNumber, this.#settings.frames);
+        if (frameNumber > this.#data.currentFrame)   this.setReverse(false); // move forward
+        else  this.setReverse(true); // move backward
+
+        return this.playFrames(Math.abs(frameNumber - this.#data.currentFrame))
+    }
+    /**
+     * Starts animation in the current direction with the specified number of frames in queue
+     * @param {Number} [numberOfFrames=0] - Number of frames to play
+     * @returns {AnimateSprite} - plugin instance
+     */
+    playFrames(numberOfFrames = 0){
+        numberOfFrames = Math.floor(numberOfFrames);
+        if (numberOfFrames < 0) return this; //empty animation
+
+        this.#animation.framesLeftToPlay = numberOfFrames;
+        return this.play();
     }
     reset(){
         this.stop();

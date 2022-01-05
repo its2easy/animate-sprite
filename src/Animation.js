@@ -3,6 +3,9 @@ export default class Animation{
     #data;
     #changeFrame;
 
+    isAnimating = false;
+    framesLeftToPlay = undefined; // frames from playTo() and playFrames()
+
     #boundAnimate;
     #lastUpdate; // time from RAF
     #duration; // time of the full animation sequence
@@ -23,6 +26,7 @@ export default class Animation{
     }
     stop(){
         this.isAnimating = false;
+        this.framesLeftToPlay = undefined;
     }
     getNextFrame(deltaFrames, reverse = undefined){
         deltaFrames = Math.floor(deltaFrames); //just to be safe
@@ -66,6 +70,7 @@ export default class Animation{
             // so after the last frame, raf is repeating until the next frame calculation
             // Between the last frame drawing and new frame time, reverse or loop could be changed, and animation won't stop
             deltaFrames = Math.floor(deltaFrames) % this.#settings.frames;
+            if ( deltaFrames > this.framesLeftToPlay ) deltaFrames = this.framesLeftToPlay;// case when screen fps higher than animation fps
             const newFrame = this.getNextFrame( deltaFrames );
             if ( this.#stopRequested ) { // animation ended in getNextFrame() check
                 this.#data.pluginApi.stop();
@@ -73,6 +78,12 @@ export default class Animation{
             } else { // animation on
                 this.#lastUpdate = time;
                 this.#changeFrame(newFrame);
+                if (typeof this.framesLeftToPlay !== 'undefined') {
+                    this.framesLeftToPlay = this.framesLeftToPlay - deltaFrames;
+                    // if 0 frames left, stop immediately, don't wait for the next frame calculation
+                    // because if isAnimating become true, this will be a new animation
+                    if ( this.framesLeftToPlay <= 0 ) this.#data.pluginApi.stop();
+                }
             }
         }
         if ( this.isAnimating ) requestAnimationFrame(this.#boundAnimate);

@@ -1,33 +1,32 @@
-import { validateParameters, getSettings } from "./settings";
+import {validateParameters, getSettings, getSettingsKeys} from "./settings";
 import { normalizeFrameNumber } from "./utils";
 import DragInput from "./DragInput";
 import Animation from "./Animation";
 
-//todo add inversion
-
 /**
  * @param {Element|HTMLElement} node - DOM Node
  * @param {Object} options - Options
- * @param {Number} options.width - Width of one frame
- * @param {Number} options.height - Height of one frame
+ * @param {Number} options.width - Width of one frame in sprite
+ * @param {Number} options.height - Height of one frame in sprite
  * @param {Number} options.frames - Number of frames
  * @param {Number|Boolean} [options.cols=false] - Number of cols if more than 1 row
- * @param {Boolean} [options.loop=false] - Whether to start a new cycle at the end
- * @param {Boolean} [options.reverse=false] - Reverse direction
- * @param {Boolean} [options.inversion=false] - Inversion
+ * @param {Boolean} [options.loop=false] - Whether to loop the animation
  * @param {Boolean} [options.autoplay=false] - Autoplay
  * @param {Number|Boolean} [options.frameTime] - ms, time between frames
  * @param {Number|Boolean} [options.duration] - ms, total time, alternative to frameTime
- * @param {Number|Boolean} [options.fps = 24] - fps, alternative to frameTime
- * @param {Number|Boolean} [options.draggable = false] - Draggable by mouse or touch
- * @param {String} [options.touchScrollMode = "pageScrollTimer"] - Page scroll behavior with touch events
+ * @param {Number|Boolean} [options.fps=24] - fps, alternative to frameTime
+ * @param {Boolean} [options.reverse=false] - Reverse direction of animation
+ * @param {Boolean} [options.inversion=false] - Inversion defines base direction. It differs from reverse in that
+ * reverse means forward or backward, and inversion determines which direction is forward. Affects animation and drag
+ * @param {Number|Boolean} [options.draggable=false] - Draggable by mouse or touch
+ * @param {String} [options.touchScrollMode="pageScrollTimer"] - Page scroll behavior with touch events
  * (preventPageScroll,allowPageScroll, pageScrollTimer)
- * @param {Number} [options.pageScrollTimerDelay = 1500] - Time in ms when touch scroll will be disabled during interaction
+ * @param {Number} [options.pageScrollTimerDelay=1500] - Time in ms when touch scroll will be disabled during interaction
  * if options.touchScrollMode = "pageScrollTimer"
  * @returns {Object}
  * @example
  *
- * var sprite = new AnimateSprite( document.getElementById('sprite'),
+ * let sprite = new AnimateSprite( document.getElementById('sprite'),
  *     {
  *         width: 720,
  *         height: 405,
@@ -130,32 +129,63 @@ export default class AnimateSprite {
         else window.removeEventListener("resize", this.#boundCalculateSizes);
     }
 
-    // Public API'
+    // Public API
+
+    /**
+     * Start animation
+     * @returns {AnimateSprite} - plugin instance
+     */
     play(){
         if ( !this.#animation.isAnimating ) this.#animation.play();
         return this;
     }
+    /**
+     * Stop animation
+     * @returns {AnimateSprite} - plugin instance
+     */
     stop(){
         this.#animation.stop();
         return this;
     }
+    /**
+     * Toggle between start and stop
+     * @returns {AnimateSprite} - plugin instance
+     */
     toggle(){
         if (!this.#animation.isAnimating) this.play();
             else this.stop();
         return this;
     }
-    next(){
-        this.stop();
-        this.#changeFrame( this.#animation.getNextFrame(1) );
-        return this;
-    }
+    /**
+     * Show the previous frame
+     * @returns {AnimateSprite} - plugin instance
+     */
     prev(){
         this.stop();
         this.#changeFrame( this.#animation.getNextFrame(1, !this.#settings.reverse) );
         return this;
     }
     /**
-     * Starts the animation. which plays until the specified frame number
+     * Show the next frame
+     * @returns {AnimateSprite} - plugin instance
+     */
+    next(){
+        this.stop();
+        this.#changeFrame( this.#animation.getNextFrame(1) );
+        return this;
+    }
+    /**
+     * Set frame (without animation)
+     * @param {Number} frameNumber - Number of the frame to show
+     * @returns {AnimateSprite} - plugin instance
+     */
+    setFrame(frameNumber){
+        this.stop();
+        this.#changeFrame( normalizeFrameNumber(frameNumber, this.#settings.frames) );
+        return this;
+    }
+    /**
+     * Starts the animation, that plays until the specified frame number
      * @param {Number} frameNumber - Target frame number
      * @returns {AnimateSprite} - plugin instance
      */
@@ -167,7 +197,7 @@ export default class AnimateSprite {
         return this.playFrames(Math.abs(frameNumber - this.#data.currentFrame))
     }
     /**
-     * Starts animation in the current direction with the specified number of frames in queue
+     * Starts the animation in the current direction with the specified number of frames in queue
      * @param {Number} [numberOfFrames=0] - Number of frames to play
      * @returns {AnimateSprite} - plugin instance
      */
@@ -178,35 +208,75 @@ export default class AnimateSprite {
         this.#animation.framesLeftToPlay = numberOfFrames;
         return this.play();
     }
+    /**
+     * Change the direction of the animation
+     * @param {Boolean} reverse
+     * @returns {AnimateSprite} - plugin instance
+     */
+    setReverse(reverse = true){
+        this.#settings.reverse = !!reverse;
+        return this;
+    }
+    /**
+     * Calculate new sprite and frame dimensions, should be called if element size was changes manually. Called automatically after resize
+     * @returns {AnimateSprite} - plugin instance
+     */
+    updateSizes(){
+        this.#calculateSizes();
+        return this;
+    }
+    getCurrentFrame() { return this.#data.currentFrame; }
+    isAnimating() { return this.#animation.isAnimating; }
+    getReverse() { return this.#settings.reverse; }
+    /**
+     * Returns option value
+     * @param {String} option - Option name. All options are allowed.
+     * @returns {*} - Option value
+     */
+    getOption(option){
+        const allowedOptions = getSettingsKeys();
+        if (allowedOptions.includes(option)) {
+            return this.#settings[option];
+        } else {
+            console.warn(`${option} is not allowed in getOption`);
+        }
+    }
+    /**
+     * Set new option value
+     * @param {String} option - Option name. All options are allowed.
+     * @param {String|Number|Boolean} value - new value
+     * @returns {AnimateSprite} - plugin instance
+     */
+    setOption(option, value) {
+        const allowedOptions = getSettingsKeys();
+        if (allowedOptions.includes(option)) {
+            this.#settings[option] = value;
+            if ( option === "width" || option === "height" || option === "frames" || option === "cols" ) {
+                this.#calculateSizes();
+            }
+            else if ( option === "frameTime" || option === "duration" || option === "fps" ) {
+                this.#settings.frameTime = this.#settings.duration = this.#settings.fps = false; // Reset
+                this.#animation.updateDuration();
+            } else if ( option === "draggable" ) {
+                this.#toggleDrag(value);
+            }
+        } else {
+            console.warn(`${option} is not allowed in setOption`);
+        }
+        return this;
+    }
+    /**
+     * Stop the animation and return to the first frame
+     * @returns @returns {AnimateSprite} - plugin instance
+     */
     reset(){
         this.stop();
         this.#changeFrame( normalizeFrameNumber(1, this.#settings.frames) );
         return this;
     }
-    setFrame(frameNumber){
-        this.stop();
-        this.#changeFrame( normalizeFrameNumber(frameNumber, this.#settings.frames) );
-        return this;
-    }
-    setReverse(reverse = true){
-        this.#settings.reverse = !!reverse;
-        return this;
-    }
-    updateSizes(){
-        this.#calculateSizes();
-    }
-    getCurrentFrame() { return this.#data.currentFrame; }
-    getTotalFrames() { return this.#settings.frames; }
-    isAnimating() { return this.#animation.isAnimating; }
-    getReverse() { return this.#settings.reverse; }
-    setOption(option, value) {
-        if ( option === "frameTime" || option === "duration" || option === "fps" ) {
-            this.#settings.frameTime = this.#settings.duration = this.#settings.fps = false; // Reset
-            this.#settings[option] = +value;
-            this.#animation.updateDuration();
-        }
-        return this;
-    }
+    /**
+     * Stop animation, remove event listeners. Method doesn't remove sprite element from the DOM
+     */
     destroy() {
         this.stop();
         this.#toggleDrag(false);

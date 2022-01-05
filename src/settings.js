@@ -1,3 +1,5 @@
+import {capitalizeFirstLetter, isNumeric} from "./utils";
+
 export function validateParameters(node, options){
     if ( !(node instanceof HTMLElement || node instanceof Element || node instanceof HTMLDocument)) {
         throw new TypeError('Node is required');
@@ -5,10 +7,7 @@ export function validateParameters(node, options){
 }
 
 export function getSettings(node, options){
-    // Setup settings
-    let inlineSettings = fillInlineSettings( node,
-        ['width', 'height', 'frames', 'cols', 'loop', 'frameTime', 'duration', 'fps', 'reverse', 'autoplay', 'draggable']
-    );
+    let inlineSettings = fillInlineSettings( node, getSettingsKeys() );
     return {...defaultSettings, ...options, ...inlineSettings};
 }
 
@@ -17,16 +16,20 @@ const defaultSettings = {
     height: 100,
     frames: 24,
     cols: false,
+
     loop: false,
+    autoplay: false,
     frameTime: false,
     duration: false,
     fps: 24,
     reverse: false,
     inversion: false,
-    autoplay: false,
     draggable: false,
     touchScrollMode: "pageScrollTimer",
     pageScrollTimerDelay: 1500,
+}
+export function getSettingsKeys(){
+    return Object.keys(defaultSettings);
 }
 
 /**
@@ -38,11 +41,16 @@ const defaultSettings = {
  */
 function fillInlineSettings(node, list) {
     let result = {};
+    const prefix = "sprite";
+
     list.forEach( (value) => {
-        if (typeof node.dataset[value.toLowerCase()] !== 'undefined') {
-            let inlineValue = node.dataset[value.toLowerCase()];
+        const datasetFormattedValue = prefix + capitalizeFirstLetter(value);
+        let inlineValue = node.dataset[datasetFormattedValue];
+
+        if (typeof inlineValue !== 'undefined') {
             if ( inlineValue === "true" || inlineValue === '') inlineValue = true;
             else if ( inlineValue === "false") inlineValue = false;
+            else if ( isNumeric(inlineValue) ) inlineValue = parseFloat(inlineValue);
             result[value] = inlineValue;
         }
     });

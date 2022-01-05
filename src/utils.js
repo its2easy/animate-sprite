@@ -45,6 +45,14 @@ export function mergeObjects(target, firstSource) {
     return to;
 }
 
+export function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+export function isNumeric(str) {
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+        !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
+
 export function isOutOfRange(frame, frames){
     return ( frame <= 0 || frame > frames );
 }

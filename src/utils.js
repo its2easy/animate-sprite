@@ -1,5 +1,21 @@
 /**
- * Object.assign polyfill
+ * Returns validated frame number between first and last frame
+ * @param {Number} frameNumber
+ * @param {Number} totalFrames
+ * @returns {Number}
+ */
+export function normalizeFrameNumber(frameNumber, totalFrames){
+    frameNumber = Math.floor(frameNumber);
+    if (frameNumber <= 0) {
+        return 1;
+    } else if (frameNumber > totalFrames) {
+        return totalFrames;
+    }
+    return frameNumber;
+}
+
+/**
+ * Object.assign polyfill from mdn
  *
  * @param {Object} target
  * @param {Object} firstSource
@@ -31,14 +47,4 @@ export function mergeObjects(target, firstSource) {
 
 export function isOutOfRange(frame, frames){
     return ( frame <= 0 || frame > frames );
-}
-
-export function normalizeFrameNumber(frameNumber, totalImages){
-    frameNumber = Math.floor(frameNumber);
-    if (frameNumber <= 0) {
-        return 1;
-    } else if (frameNumber > totalImages) {
-        return totalImages;
-    }
-    return frameNumber;
 }

@@ -3,6 +3,8 @@ import { normalizeFrameNumber } from "./utils";
 import DragInput from "./DragInput";
 import Animation from "./Animation";
 
+//todo add inversion,
+
 /**
  * @param {Element|HTMLElement} node - DOM Node
  * @param {Object} options - Options
@@ -37,12 +39,13 @@ import Animation from "./Animation";
 export default class AnimateSprite {
     #settings;
     #data = {
-        currentFrame: 1,//main. drag, animation
-        nodeWidth: null,//drag
-        nodeHeight: null,//drag
-        element: null, //drag
-        pluginApi: {}// drag, animation
+        currentFrame: 1,
+        nodeWidth: null,
+        nodeHeight: null,
+        element: null,
+        pluginApi: {},
     }
+    #boundCalculateSizes;
     // Classes
     #dragInput;
     #animation;
@@ -52,20 +55,20 @@ export default class AnimateSprite {
         this.#settings = getSettings(node, options);
         this.#data.element = node;
         this.#data.pluginApi = this;
-        this.initPlugin();
+        this.#boundCalculateSizes = this.#calculateSizes.bind(this);
+        this.#initPlugin();
     }
 
-    initPlugin(){
+    #initPlugin(){
         this.#animation = new Animation(
             {settings: this.#settings, data: this.#data, changeFrame: this.#changeFrame.bind(this)} );
         this.#calculateSizes();
-        addResizeHandler(this.#calculateSizes.bind(this));
+        this.#toggleResizeHandler(true);
 
         if ( this.#settings.autoplay ) this.play();
         if ( this.#settings.draggable ) this.#toggleDrag(true);
     }
 
-    // Private functions
     #animateSprite(frame) {
         this.#data.element.style.backgroundPosition = this.#calculatePosition(frame);
     }
@@ -74,10 +77,8 @@ export default class AnimateSprite {
         this.#animateSprite(frameNumber);
         this.#data.currentFrame = frameNumber;
     }
-
     #calculatePosition(frame){
-        let xPadding,
-            yPadding = 0;
+        let xPadding, yPadding = 0;
         if ( !this.#settings.cols ){ // Single row sprite
             xPadding = (frame - 1) * this.#data.nodeWidth;
         } else { // Multiline sprite
@@ -88,12 +89,15 @@ export default class AnimateSprite {
     }
 
     #calculateSizes(){
-        const wasAnimating = this.#animation.isAnimating;
-        this.stop();
-        let widthHeightRatio = this.#settings.width / this.#settings.height;
-        this.#data.nodeWidth = this.#data.element.offsetWidth;
+        const newNodeWidth = this.#data.element.offsetWidth;
+        if (this.#data.nodeWidth === newNodeWidth ) return;//skip if same size
+
+        const wasAnimating = this.#animation.isAnimating,
+              widthHeightRatio = this.#settings.width / this.#settings.height;
+        this.#data.nodeWidth = newNodeWidth;
         this.#data.nodeHeight = this.#data.nodeWidth / widthHeightRatio;
         this.#data.element.style.height = this.#data.nodeHeight + "px";
+
         let bgWidth =  ( !this.#settings.cols )
             ? this.#settings.frames * this.#data.nodeWidth
             : this.#settings.cols * this.#data.nodeWidth;
@@ -120,11 +124,14 @@ export default class AnimateSprite {
         }
     }
 
-    // Public API'
+    #toggleResizeHandler(add = true) {
+        if ( add ) window.addEventListener("resize", this.#boundCalculateSizes);
+        else window.removeEventListener("resize", this.#boundCalculateSizes);
+    }
 
+    // Public API'
     play(){
-        if ( this.#animation.isAnimating ) return;
-        this.#animation.play();
+        if ( !this.#animation.isAnimating ) this.#animation.play();
         return this;
     }
     stop(){
@@ -132,8 +139,8 @@ export default class AnimateSprite {
         return this;
     }
     toggle(){
-        if ( !this.#animation.isAnimating ) this.play();
-        else this.stop();
+        if (!this.#animation.isAnimating) this.play();
+            else this.stop();
         return this;
     }
     next(){
@@ -148,45 +155,39 @@ export default class AnimateSprite {
     }
     reset(){
         this.stop();
-        this.#changeFrame(normalizeFrameNumber(1, this.#settings.frames));
+        this.#changeFrame( normalizeFrameNumber(1, this.#settings.frames) );
         return this;
     }
     setFrame(frameNumber){
         this.stop();
-        this.#changeFrame(normalizeFrameNumber(frameNumber, this.#settings.frames));
+        this.#changeFrame( normalizeFrameNumber(frameNumber, this.#settings.frames) );
         return this;
     }
     setReverse(reverse = true){
         this.#settings.reverse = !!reverse;
         return this;
     }
+    updateSizes(){
+        this.#calculateSizes();
+    }
     getCurrentFrame() { return this.#data.currentFrame; }
+    getTotalFrames() { return this.#settings.frames; }
     isAnimating() { return this.#animation.isAnimating; }
+    getReverse() { return this.#settings.reverse; }
     setOption(option, value) {
         if ( option === "frameTime" || option === "duration" || option === "fps" ) {
             this.#settings.frameTime = this.#settings.duration = this.#settings.fps = false; // Reset
             this.#settings[option] = +value;
             this.#animation.updateDuration();
-            if ( this.#animation.isAnimating ) {
-                this.stop();
-                this.play();
-            }
         }
         return this;
     }
     destroy() {
         this.stop();
         this.#toggleDrag(false);
-        removeResizeHandler( this.#calculateSizes.bind(this) );
+        this.#toggleResizeHandler(false);
     }
-}
 
-
-function addResizeHandler(cb) {
-    window.addEventListener("resize", cb); // todo add debouncing
-}
-function removeResizeHandler(cb) {
-    window.removeEventListener("resize", cb);
 }
 
 

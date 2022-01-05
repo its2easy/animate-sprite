@@ -1,6 +1,5 @@
 export default class DragInput{
     static #SWIPE_EVENTS = ['mousedown', 'mousemove', 'mouseup', 'touchstart', 'touchmove', 'touchend', 'touchcancel'];
-
     #data;
     #settings;
     #changeFrame;
@@ -34,12 +33,12 @@ export default class DragInput{
         DragInput.#SWIPE_EVENTS.forEach( (value) => {
             this.#data.element.removeEventListener(value, this.#boundSwipeHandler);
         });
-        document.removeEventListener('mouseup', this.#boundSwipeHandler);
-        document.removeEventListener('mousemove', this.#boundSwipeHandler);
+        this.#toggleDocumentEventHandlers(false);
         this.#data.element.style.cursor = null;
     }
+
     /**
-     * Update one frame threshold in pixels
+     * Update one frame threshold in pixels, based on block width, should be called after nodeWidth change
      * @param newValue
      */
     updateThreshold(newValue = null){
@@ -60,8 +59,7 @@ export default class DragInput{
             case 'mousedown':
             case 'touchstart':
                 if ( event.type === 'touchstart' && event.cancelable) this.#maybeDisableScroll(event);
-                document.addEventListener('mouseup', this.#boundSwipeHandler);
-                document.addEventListener('mousemove', this.#boundSwipeHandler);
+                this.#toggleDocumentEventHandlers(true);
                 this.#swipeStart();
                 break;
             case 'mousemove':
@@ -72,8 +70,7 @@ export default class DragInput{
             case 'touchend':
             case 'touchcancel':
                 //if ( (event.type === 'touchend' || event.type === 'touchcancel') && event.cancelable) event.preventDefault();
-                document.removeEventListener('mouseup', this.#boundSwipeHandler);
-                document.removeEventListener('mousemove', this.#boundSwipeHandler);
+                this.#toggleDocumentEventHandlers(false);
                 this.#swipeEnd();
                 break;
         }
@@ -92,18 +89,18 @@ export default class DragInput{
         const direction = this.#swipeDirection();
         const swipeLength = Math.round( Math.abs(this.#curX - this.#prevX) ) + this.#pixelsCorrection;
 
-        if ( swipeLength <= this.#threshold) return; // Ignore if less than 1 frame
+        if ( swipeLength <= this.#threshold) return; // Ignore if pixels are less than 1 frame
         if ( direction !== 'left' && direction !== 'right') return; // Ignore vertical directions
 
         this.#prevX = this.#curX;
-        this.#prevY = this.#curY; // Update Y to get right angle
+        this.#prevY = this.#curY;
 
         const progress = swipeLength / this.#data.nodeWidth;
         let deltaFrames = Math.floor(progress * this.#settings.frames);
         deltaFrames = deltaFrames % this.#settings.frames;
         // Add pixels to the next swipeMove if frames equivalent of swipe is not an integer number,
         // e.g one frame is 10px, swipeLength is 13px, we change 1 frame and add 3px to the next swipe,
-        // so fullwidth swipe is always rotate sprite for 1 turn
+        // so fullwidth swipe is always rotate sprite for 1 turn (all frames)
         this.#pixelsCorrection = swipeLength - (this.#threshold * deltaFrames);
         //todo add inversion option
         this.#changeFrame(this.#getNextFrame( deltaFrames, (direction === 'left') ));// left means backward (reverse: true)
@@ -149,6 +146,20 @@ export default class DragInput{
                 this.#lastInteractionTime = null;
             }
         }
-        // if touchScrollMode="allowPageScroll" => don't prevent scroll
+        // if touchScrollMode="allowPageScroll" => don't prevent scroll, so no action is needed
+    }
+
+    /**
+     * Events to continue dragging if cursor is outside of the sprite block
+     * @param {boolean} add
+     */
+    #toggleDocumentEventHandlers(add = true){
+        if ( add ) {
+            document.addEventListener('mouseup', this.#boundSwipeHandler);
+            document.addEventListener('mousemove', this.#boundSwipeHandler);
+        } else {
+            document.removeEventListener('mouseup', this.#boundSwipeHandler);
+            document.removeEventListener('mousemove', this.#boundSwipeHandler);
+        }
     }
 }

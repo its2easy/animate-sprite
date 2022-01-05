@@ -3,6 +3,7 @@ export default class Animation{
     #data;
     #changeFrame;
 
+    #boundAnimate;
     #lastUpdate; // time from RAF
     #duration; // time of the full animation sequence
     #stopRequested = false;
@@ -11,13 +12,14 @@ export default class Animation{
         this.#settings = settings;
         this.#data = data;
         this.#changeFrame = changeFrame;
+        this.#boundAnimate = this.#animate.bind(this);
         this.updateDuration();
     }
 
     play(){
         this.isAnimating = true;
-        this.updateLastUpdate();
-        requestAnimationFrame(this.#animate.bind(this));
+        this.#lastUpdate = performance.now();
+        requestAnimationFrame(this.#boundAnimate);
     }
     stop(){
         this.isAnimating = false;
@@ -52,7 +54,7 @@ export default class Animation{
         return  newFrameNumber;
     }
     #animate(time){
-        if ( !this.isAnimating ) return;
+        if ( !this.isAnimating ) return; //stop() was called before this RAF
 
         const progress = ( time - this.#lastUpdate ) / this.#duration; // ex. 0.01
         let deltaFrames = progress * this.#settings.frames; // Ex. 0.45 or 1.25
@@ -60,12 +62,12 @@ export default class Animation{
         if ( deltaFrames >= 1) { // Animate only if we need to update 1 frame or more
             // calculate next frame only when we want to render
             // if the getNextFrame check was outside, getNextFrame would be called at screen fps rate, not animation fps
-            // if screen fps 144 and animation fps 30, getNextFrame is calling now 30/s instead of 144/s,
+            // if screen fps 144 and animation fps 30, getNextFrame is calling now 30/sec instead of 144/sec,
             // so after the last frame, raf is repeating until the next frame calculation
             // Between the last frame drawing and new frame time, reverse or loop could be changed, and animation won't stop
             deltaFrames = Math.floor(deltaFrames) % this.#settings.frames;
             const newFrame = this.getNextFrame( deltaFrames );
-            if ( this.#stopRequested ) { // animation ended from check in getNextFrame()
+            if ( this.#stopRequested ) { // animation ended in getNextFrame() check
                 this.#data.pluginApi.stop();
                 this.#stopRequested = false;
             } else { // animation on
@@ -73,17 +75,14 @@ export default class Animation{
                 this.#changeFrame(newFrame);
             }
         }
-        if ( this.isAnimating ) requestAnimationFrame(this.#animate.bind(this));
+        if ( this.isAnimating ) requestAnimationFrame(this.#boundAnimate);
     }
     updateDuration(){
         this.#duration = this.#calculateDuration();
     }
-    updateLastUpdate(){
-        this.#lastUpdate = performance.now();
-    }
     #calculateDuration(){
-        if (this.#settings.frameTime) return this.#settings.frameTime * this.#settings.frames;
-        else if (this.#settings.duration) return this.#settings.duration;
-        else return  ( this.#settings.frames / this.#settings.fps ) * 1000;
+        if (this.#settings.frameTime) return this.#settings.frameTime * this.#settings.frames; // frameTime
+        else if (this.#settings.duration) return this.#settings.duration; // duration
+        else return  ( this.#settings.frames / this.#settings.fps ) * 1000; // fps
     }
 }

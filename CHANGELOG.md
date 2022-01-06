@@ -1,5 +1,6 @@
 # Changelog
-
+## 2.0.1
+- fix package.json main key
 ## 2.0.0
 - plugin import changed
 - new initialization with constructor instead of ```init``` method  

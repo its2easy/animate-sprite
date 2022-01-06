@@ -252,10 +252,12 @@ export default class AnimateSprite {
         if (allowedOptions.includes(option)) {
             this.#settings[option] = value;
             if ( option === "width" || option === "height" || option === "frames" || option === "cols" ) {
+                this.#settings[option] = parseInt(value, 10); // additional validation
                 this.#calculateSizes();
             }
             else if ( option === "frameTime" || option === "duration" || option === "fps" ) {
                 this.#settings.frameTime = this.#settings.duration = this.#settings.fps = false; // Reset
+                this.#settings[option] = parseInt(value, 10); // set again because of reset
                 this.#animation.updateDuration();
             } else if ( option === "draggable" ) {
                 this.#toggleDrag(value);

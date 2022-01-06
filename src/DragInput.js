@@ -102,7 +102,6 @@ export default class DragInput{
         // e.g one frame is 10px, swipeLength is 13px, we change 1 frame and add 3px to the next swipe,
         // so fullwidth swipe is always rotate sprite for 1 turn (all frames)
         this.#pixelsCorrection = swipeLength - (this.#threshold * deltaFrames);
-        //todo add inversion option
         this.#changeFrame(this.#getNextFrame( deltaFrames, (direction === 'left') ));// left means backward (reverse: true)
         this.#data.element.dispatchEvent(new CustomEvent('sprite:drag-change',
             {detail: {frame: this.#data.currentFrame}}

@@ -8,7 +8,7 @@
 Demo - [codepen](https://codepen.io/its2easy/pen/VwvVRed)
 
 **animate-sprite** is a library (11kb without gzip) without built-in UI which allows to animate a 
-sequence of frames that looks like 3d. It supports playing full animation
+sequence of frames that looks like 3d rotation. It supports playing full animation
 sequence, play specified number of frames, rotate an image by the mouse and touch; and 
 exposes an API to programmatically control the animation.
 
@@ -152,7 +152,7 @@ after initialization.
 | **height** <br> ```data-sprite-height``` | Number | :heavy_check_mark: |   | Height of one frame in a sprite  |
 | **frames** <br> ```data-sprite-frames``` | Number | :heavy_check_mark: |   | Total number of frames  |
 | **cols** <br> ```data-sprite-cols```| Number&#124;false |  | false | Number of cols if more than 1 row |
-| **loop** <br> ```data-sprite-loop``` | Boolean |  | false |  Whether to loop the animation |
+| **loop** <br> ```data-sprite-loop``` | Boolean |  | false |  Loop the animation |
 | **autoplay** <br> ```data-sprite-autoplay``` | Boolean |  | false |  Autoplay |
 | **frameTime** <br> ```data-sprite-frame-time``` | Number&#124;false | | false |  ms, time between frames |
 | **duration** <br> ```data-sprite-duration``` | Number&#124;false |  | false |  ms, total time, alternative to frameTime |

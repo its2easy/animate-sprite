@@ -1,4 +1,6 @@
 # Changelog
+## 2.1.0
+- add types, fix documentation
 ## 2.0.1
 - fix package.json main key
 ## 2.0.0

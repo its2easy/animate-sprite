@@ -4,6 +4,7 @@ import { babel } from '@rollup/plugin-babel';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import bundleSize from 'rollup-plugin-bundle-size';
+import dts from "rollup-plugin-dts";
 
 const { LIB_FILE_NAME } = require( './shared');
 const banner = require("./banner");
@@ -59,5 +60,10 @@ export default defineConfig([
                 plugins: [ terser() ]
             }
         ],
+    },
+    { // bundle types to hide internal modules, because @internal is not recommended in ts docs
+        input: "./types/index.d.ts",
+        output: [{ file: `types/${LIB_FILE_NAME}.d.ts`, format: "es" }],
+        plugins: [dts()],
     },
 ]);

@@ -1,39 +1,18 @@
-import {validateParameters, getSettings, getSettingsKeys} from "./settings";
+import { validateParameters, getSettings, getSettingsKeys } from "./settings";
 import { normalizeFrameNumber } from "./utils";
 import DragInput from "./DragInput";
 import Animation from "./Animation";
 
 /**
- * @param {Element|HTMLElement} node - DOM Node
- * @param {Object} options - Options
- * @param {Number} options.width - Width of one frame in sprite
- * @param {Number} options.height - Height of one frame in sprite
- * @param {Number} options.frames - Number of frames
- * @param {Number|Boolean} [options.cols=false] - Number of cols if more than 1 row
- * @param {Boolean} [options.loop=false] - Whether to loop the animation
- * @param {Boolean} [options.autoplay=false] - Autoplay
- * @param {Number|Boolean} [options.frameTime] - ms, time between frames
- * @param {Number|Boolean} [options.duration] - ms, total time, alternative to frameTime
- * @param {Number|Boolean} [options.fps=24] - fps, alternative to frameTime
- * @param {Boolean} [options.reverse=false] - Reverse direction of animation
- * @param {Boolean} [options.inversion=false] - Inversion defines base direction. It differs from reverse in that
- * reverse means forward or backward, and inversion determines which direction is forward. Affects animation and drag
- * @param {Number|Boolean} [options.draggable=false] - Draggable by mouse or touch
- * @param {String} [options.touchScrollMode="pageScrollTimer"] - Page scroll behavior with touch events
- * (preventPageScroll,allowPageScroll, pageScrollTimer)
- * @param {Number} [options.pageScrollTimerDelay=1500] - Time in ms when touch scroll will be disabled during interaction
- * if options.touchScrollMode = "pageScrollTimer"
- * @returns {Object}
+ * Animate Sprite {@link https://github.com/its2easy/animate-sprite/}
  * @example
- *
  * let sprite = new AnimateSprite( document.getElementById('sprite'),
  *     {
  *         width: 720,
  *         height: 405,
- *         cols: 5,
  *         frames: 20,
- *         frameTime: 45,
- *         loop: true
+ *         cols: 5,
+ *         fps: 45,
  *     }
  */
 export default class AnimateSprite {
@@ -50,7 +29,12 @@ export default class AnimateSprite {
     #dragInput;
     #animation;
 
-    constructor( node, options = {} ) {
+    /**
+     * Creates plugin instance
+     * @param {Element|HTMLElement} node - HTML element
+     * @param {PluginOptions} options
+     */
+    constructor( node, options ) {
         validateParameters(node, options);
         this.#settings = getSettings(node, options);
         this.#data.element = node;
@@ -133,7 +117,7 @@ export default class AnimateSprite {
 
     /**
      * Start animation
-     * @returns {AnimateSprite} - plugin instance
+     * @returns {this} - plugin instance
      */
     play(){
         if ( !this.#animation.isAnimating ) this.#animation.play();
@@ -210,7 +194,7 @@ export default class AnimateSprite {
     }
     /**
      * Change the direction of the animation
-     * @param {Boolean} reverse
+     * @param {Boolean} [reverse=true]
      * @returns {AnimateSprite} - plugin instance
      */
     setReverse(reverse = true){
@@ -218,7 +202,8 @@ export default class AnimateSprite {
         return this;
     }
     /**
-     * Calculate new sprite and frame dimensions, should be called if element size was changes manually. Called automatically after resize
+     * Calculate new dimensions (sprite element and frame), should be called if element size was changes manually.
+     * Called automatically after resize
      * @returns {AnimateSprite} - plugin instance
      */
     updateSizes(){
@@ -226,12 +211,14 @@ export default class AnimateSprite {
         return this;
     }
     getCurrentFrame() { return this.#data.currentFrame; }
+    /** @returns {boolean} - animating or not */
     isAnimating() { return this.#animation.isAnimating; }
+    /** @returns {boolean} - reverse true or false */
     getReverse() { return this.#settings.reverse; }
     /**
      * Returns option value
      * @param {String} option - Option name. All options are allowed.
-     * @returns {*} - Option value
+     * @returns {number|string|boolean} - Option value
      */
     getOption(option){
         const allowedOptions = getSettingsKeys();
@@ -287,4 +274,26 @@ export default class AnimateSprite {
 
 }
 
+// can't import typedef from another file because it won't add type to d.ts, check this in the future
+
+/**
+ * @typedef {object} PluginOptions
+ * @property {number} width - Width of one frame in sprite
+ * @property {number} height - Height of one frame in sprite
+ * @property {number} frames - Number of frames
+ * @property {number|false} [cols=false] - Number of cols if more than 1 row
+ * @property {boolean} [loop=false] - Whether to loop the animation
+ * @property {boolean} [autoplay=false] - Autoplay
+ * @property {number|false} [frameTime] - ms, time between frames
+ * @property {number|false} [duration] - ms, total time, alternative to frameTime
+ * @property {number|false} [fps=24] - fps, alternative to frameTime
+ * @property {boolean} [reverse=false] - Reverse direction of animation
+ * @property {boolean} [inversion=false] - Inversion defines base direction. It differs from reverse in that
+ * reverse means forward or backward, and inversion determines which direction is forward. Affects animation and drag
+ * @property {number|boolean} [draggable=false] - Draggable by mouse or touch
+ * @property {'pageScrollTimer' | 'preventPageScroll' | 'allowPageScroll'} [touchScrollMode="pageScrollTimer"]
+ * - Page scroll behavior with touch events (preventPageScroll,allowPageScroll, pageScrollTimer)
+ * @property {number} [pageScrollTimerDelay=1500] - Time in ms when touch scroll will be disabled during interaction
+ * if options.touchScrollMode = "pageScrollTimer"
+ */
 

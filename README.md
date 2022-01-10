@@ -148,20 +148,20 @@ after initialization.
 
 | Parameter  | Type | Required | Default | Description |
 | :--- | :--- | :---:| :---: | ---  |
-| **width** <br> ```data-sprite-width``` | Number | :heavy_check_mark:  |   | Width of one frame in a sprite  |
-| **height** <br> ```data-sprite-height``` | Number | :heavy_check_mark: |   | Height of one frame in a sprite  |
-| **frames** <br> ```data-sprite-frames``` | Number | :heavy_check_mark: |   | Total number of frames  |
-| **cols** <br> ```data-sprite-cols```| Number&#124;false |  | false | Number of cols if more than 1 row |
-| **loop** <br> ```data-sprite-loop``` | Boolean |  | false |  Loop the animation |
-| **autoplay** <br> ```data-sprite-autoplay``` | Boolean |  | false |  Autoplay |
-| **frameTime** <br> ```data-sprite-frame-time``` | Number&#124;false | | false |  ms, time between frames |
-| **duration** <br> ```data-sprite-duration``` | Number&#124;false |  | false |  ms, total time, alternative to frameTime |
-| **fps** <br> ```data-sprite-fps``` | Number&#124;false |  | 24 |  fps, alternative to frameTime |
-| **reverse** <br> ```data-sprite-reverse``` | Boolean |  | false |  Reverse direction of animation |
-| **inversion** <br> ```data-sprite-inversion``` | Boolean |  | false |  Inversion defines base direction. It differs from ```reverse``` in that reverse means forward or backward, and inversion determines which direction is forward. Affects animation and drag |
-| **draggable** <br> ```data-sprite-draggable``` | Boolean |  | false |  Draggable by mouse or touch |
-| **touchScrollMode** <br> ```data-sprite-touch-scroll-mode``` | String | | "pageScrollTimer" | Page scroll behavior with touch events _(only for events that fire in the plugin area)_. Available modes: **preventPageScroll** - touch scroll is always disabled. **allowPageScroll** - touch scroll is always enabled. **pageScrollTimer** - after the first interaction the scroll is not disabled; if the time between the end of the previous interaction and the start of a new one is less than _pageScrollTimerDelay_, then scroll will be disabled; if more time has passed, then scroll will be enabled again |
-| **pageScrollTimerDelay** <br> ```data-sprite-page-scroll-timer-delay``` | Number | | 1500 | Time in ms when touch scroll will be disabled after the last user interaction, if touchScrollMode = "pageScrollTimer" |
+| **width** <br> ```data-sprite-width``` | number | :heavy_check_mark:  |   | Width of one frame in a sprite  |
+| **height** <br> ```data-sprite-height``` | number | :heavy_check_mark: |   | Height of one frame in a sprite  |
+| **frames** <br> ```data-sprite-frames``` | number | :heavy_check_mark: |   | Total number of frames  |
+| **cols** <br> ```data-sprite-cols```| number&#124;false |  | false | Number of cols if more than 1 row |
+| **loop** <br> ```data-sprite-loop``` | boolean |  | false |  Loop the animation |
+| **autoplay** <br> ```data-sprite-autoplay``` | boolean |  | false |  Autoplay |
+| **frameTime** <br> ```data-sprite-frame-time``` | number&#124;false | | false |  ms, time between frames |
+| **duration** <br> ```data-sprite-duration``` | number&#124;false |  | false |  ms, total time, alternative to frameTime |
+| **fps** <br> ```data-sprite-fps``` | number&#124;false |  | 24 |  fps, alternative to frameTime |
+| **reverse** <br> ```data-sprite-reverse``` | boolean |  | false |  Reverse direction of animation |
+| **inversion** <br> ```data-sprite-inversion``` | boolean |  | false |  Inversion defines base direction. It differs from ```reverse``` in that reverse means forward or backward, and inversion determines which direction is forward. Affects animation and drag |
+| **draggable** <br> ```data-sprite-draggable``` | boolean |  | false |  Draggable by mouse or touch |
+| **touchScrollMode** <br> ```data-sprite-touch-scroll-mode``` | string | | "pageScrollTimer" | Page scroll behavior with touch events _(only for events that fire in the plugin area)_. Available modes: **preventPageScroll** - touch scroll is always disabled. **allowPageScroll** - touch scroll is always enabled. **pageScrollTimer** - after the first interaction the scroll is not disabled; if the time between the end of the previous interaction and the start of a new one is less than _pageScrollTimerDelay_, then scroll will be disabled; if more time has passed, then scroll will be enabled again |
+| **pageScrollTimerDelay** <br> ```data-sprite-page-scroll-timer-delay``` | number | | 1500 | Time in ms when touch scroll will be disabled after the last user interaction, if touchScrollMode = "pageScrollTimer" |
 
 > If multiple time options (`frameTime`, `duration` or `fps`) are set at the 
 same time, `frameTime` has higher priority, then `duration`, then `fps`.
@@ -172,8 +172,8 @@ same time, `frameTime` has higher priority, then `duration`, then `fps`.
 Initializes and returns an instance of a sprite.
 
 `parameters`
-- element : NodeElement - dom element
-- options : Object - configuration [options](#options)
+- element : {Element | HTMLElement} - HTML element
+- options : {Object} - configuration [options](#options)
 
 `returns` {AnimateSprite} - plugin instance
 
@@ -218,7 +218,7 @@ Show the next frame
 Set frame (without animation)
 
 `parameters`
-- frameNumber : Number - Frame number
+- frameNumber : {number} - Frame number
 ```javascript
 sprite.setFrame(35);
 ```
@@ -230,7 +230,7 @@ sprite.setFrame(35);
 Starts the animation, that plays until the specified frame number
 
 `parameters`
-- frameNumber {Number} - Target frame number
+- frameNumber {number} - Target frame number
 ```javascript
 // if current frame is 30 of 100, it will play from 30 to 85, 
 // if current frame is 95, it will play from 95 to 85
@@ -246,7 +246,7 @@ of frames in queue. If `options.loop: false` animation will stop
 if it reaches the first or the last frame.
 
 `parameters`
-- numberOfFrames {Number} - Number of frames to play
+- numberOfFrames {number} - Number of frames to play
 ```javascript
 instance.playFrames(200);
 ```
@@ -258,15 +258,16 @@ instance.playFrames(200);
 Change the direction of the animation
 
 `parameters`
-- reverse : {Boolean} - true to reverse, false to normal direction
+- reverse : {boolean} - true to reverse, false to normal direction
 ```javascript
 sprite.setReverse(true);
 ```
+`returns` {AnimateSprite} - plugin instance
 
 ---
 
 ### updateSizes
-Calculate new sprite and frame dimensions, should be called if element size was 
+Calculate new dimensions (sprite element and frame), should be called if element size was 
 changes manually. updateSizes is called automatically after resize
 
 `returns` {AnimateSprite} - plugin instance
@@ -277,11 +278,11 @@ changes manually. updateSizes is called automatically after resize
 Returns option value
 
 `parameters`
-- option {String} -  Option name. All options are allowed.
+- option {string} -  Option name. All options are allowed.
 ```javascript
 let loop = instance.getOption('loop');
 ```
-`returns` {*} - Option value
+`returns` {number|string|boolean} - Option value
 
 ---
 
@@ -290,32 +291,32 @@ Set new option value
 
 `parameters`
 - option : String - Option name. All options are allowed.
-- value : String|Number|Boolean - New value
+- value : string|number|boolean - New value
 ```javascript
 sprite.setOption('frameTime', 40);
 ```
-`returns` {AnimateSprite} - plugin instance
+`returns` {animateSprite} - plugin instance
 
 ---
 
 ### getCurrentFrame
 Returns current frame number
 
-`returns` {Number} - Frame number
+`returns` {number} - Frame number
 
 ---
 
 ### isAnimating
 Returns `true` if sprite is animating, else `false`
 
-`returns` {Boolean}
+`returns` {boolean}
 
 ---
 
 ### getReverse
 Returns current reverse value
 
-`returns` {Boolean} - reverse
+`returns` {boolean} - reverse
 
 ---
 

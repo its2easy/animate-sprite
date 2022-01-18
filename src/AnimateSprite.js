@@ -6,14 +6,13 @@ import Animation from "./Animation";
 /**
  * Animate Sprite {@link https://github.com/its2easy/animate-sprite/}
  * @example
- * let sprite = new AnimateSprite( document.getElementById('sprite'),
- *     {
- *         width: 720,
- *         height: 405,
- *         frames: 20,
- *         cols: 5,
- *         fps: 45,
- *     });
+ * let sprite = new AnimateSprite( document.getElementById('sprite'), {
+ *     width: 720,
+ *     height: 405,
+ *     frames: 20,
+ *     cols: 5,
+ *     fps: 60,
+ * });
  */
 export default class AnimateSprite {
     #settings;
@@ -143,15 +142,6 @@ export default class AnimateSprite {
         return this;
     }
     /**
-     * Show the previous frame
-     * @returns {AnimateSprite} - plugin instance
-     */
-    prev(){
-        this.stop();
-        this.#changeFrame( this.#animation.getNextFrame(1, !this.#settings.reverse) );
-        return this;
-    }
-    /**
      * Show the next frame
      * @returns {AnimateSprite} - plugin instance
      */
@@ -161,8 +151,17 @@ export default class AnimateSprite {
         return this;
     }
     /**
+     * Show the previous frame
+     * @returns {AnimateSprite} - plugin instance
+     */
+    prev(){
+        this.stop();
+        this.#changeFrame( this.#animation.getNextFrame(1, !this.#settings.reverse) );
+        return this;
+    }
+    /**
      * Set frame (without animation)
-     * @param {Number} frameNumber - Number of the frame to show
+     * @param {number} frameNumber - Number of the frame to show
      * @returns {AnimateSprite} - plugin instance
      */
     setFrame(frameNumber){
@@ -172,7 +171,7 @@ export default class AnimateSprite {
     }
     /**
      * Starts the animation, that plays until the specified frame number
-     * @param {Number} frameNumber - Target frame number
+     * @param {number} frameNumber - Target frame number
      * @returns {AnimateSprite} - plugin instance
      */
     playTo(frameNumber){
@@ -184,7 +183,7 @@ export default class AnimateSprite {
     }
     /**
      * Starts the animation in the current direction with the specified number of frames in queue
-     * @param {Number} [numberOfFrames=0] - Number of frames to play
+     * @param {number} [numberOfFrames=0] - Number of frames to play
      * @returns {AnimateSprite} - plugin instance
      */
     playFrames(numberOfFrames = 0){
@@ -195,32 +194,31 @@ export default class AnimateSprite {
         return this.play();
     }
     /**
-     * Change the direction of the animation
-     * @param {Boolean} [reverse=true]
+     * Change the direction of the animation. Alias to <b>setOption('reverse', true)</b>
+     * @param {boolean} [reverse=true] True for backward animation, false for forward
      * @returns {AnimateSprite} - plugin instance
      */
     setReverse(reverse = true){
         this.#settings.reverse = !!reverse;
         return this;
     }
+    /** Get current reverse option. Alias to <b>getOption('reverse')</b>
+     * @returns {boolean} - reverse or not
+     */
+    getReverse() { return this.#settings.reverse; }
     /**
-     * Calculate new dimensions (sprite element and frame), should be called if element size was changes manually.
-     * Called automatically after resize
+     * Calculate new dimensions (sprite element and frame), this function should be called if element size was changed by a script.
+     * Called automatically after page resize
      * @returns {AnimateSprite} - plugin instance
      */
     updateSizes(){
         this.#calculateSizes();
         return this;
     }
-    getCurrentFrame() { return this.#data.currentFrame; }
-    /** @returns {boolean} - animating or not */
-    isAnimating() { return this.#animation.isAnimating; }
-    /** @returns {boolean} - reverse true or false */
-    getReverse() { return this.#settings.reverse; }
     /**
      * Returns option value
-     * @param {String} option - Option name. All options are allowed.
-     * @returns {number|string|boolean} - Option value
+     * @param {string} option - Option name. All options are allowed.
+     * @returns {*} - Option value
      */
     getOption(option){
         const allowedOptions = getSettingsKeys();
@@ -232,8 +230,8 @@ export default class AnimateSprite {
     }
     /**
      * Set new option value
-     * @param {String} option - Option name. All options are allowed.
-     * @param {String|Number|Boolean} value - new value
+     * @param {string} option - Option name. All options are allowed.
+     * @param {*} value - new value
      * @returns {AnimateSprite} - plugin instance
      */
     setOption(option, value) {
@@ -255,6 +253,10 @@ export default class AnimateSprite {
         }
         return this;
     }
+    /** @returns {number} - current frame number */
+    getCurrentFrame() { return this.#data.currentFrame; }
+    /** @returns {boolean} - animating or not */
+    isAnimating() { return this.#animation.isAnimating; }
     /**
      * Stop the animation and return to the first frame
      * @returns @returns {AnimateSprite} - plugin instance
@@ -275,7 +277,7 @@ export default class AnimateSprite {
 
 }
 
-// can't import typedef from another file because it won't add type to d.ts, check this in the future
+// todo can't import typedef from another file because it won't add type to d.ts, check this in the future
 
 /**
  * @typedef {object} PluginOptions

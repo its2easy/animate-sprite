@@ -5,7 +5,7 @@ const config = {
     entry: path.join(__dirname, `../src/index.js`),
     output: {
         path: path.resolve(__dirname, '../build'),
-        filename: `${LIB_FILE_NAME}.min.js`,
+        filename: `${LIB_FILE_NAME}.umd.min.js`,
         library: {
             name: LIB_NAME,
             type: 'umd',

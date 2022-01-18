@@ -1,4 +1,14 @@
 # Changelog
+## 2.2.0
+- new ```onAnimationEnd``` and ```onFrameChange``` callbacks
+- new ```sprite:animation-end``` event
+- new ```dragModifier``` option
+- more validations
+- fix wrong animation duration
+- ```inversion``` is now only used while dragging and doesn't affect animation
+- proper handling of empty animation in ```playTo``` and ```playFrames```
+- fix animation stop after dragging and loop: false
+- umd version filename is now ```build/animate-sprite.umd.min.js```
 ## 2.1.0
 - add types, fix documentation
 ## 2.0.1

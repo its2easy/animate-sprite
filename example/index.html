@@ -25,11 +25,11 @@
         input.form-control{
             padding: 6px 6px;
         }
-        .btn.off{
-            background-color: #6c757d;
+        .form-check-inline{
+            margin-right: 8px;
         }
-        .btn.on{
-            background-color: #26cc49;
+        .input-group .small-input{
+            width: 50px;
         }
         @media (max-width: 991.98px) {
             .sprite2{
@@ -68,23 +68,23 @@
                         <button type="button" class="btn btn-info js-reset">Reset</button>
                     </div>
                 </div>
-                <div class="col-12 col-lg-auto col-xl-auto d-flex justify-content-center pt-2 mb-3 mb-lg-0">
-                    <div class="form-check form-switch me-3">
+                <div class="col-12 col-lg-auto col-xl-auto pt-2 mb-3 mb-lg-0">
+                    <div class="form-check form-switch form-check-inline me-3">
                         <input class="form-check-input js-reverse" type="checkbox" id="reverse-checkbox">
                         <label class="form-check-label" for="reverse-checkbox">Reverse</label>
                     </div>
-                    <div class="form-check form-switch me-3">
+                    <div class="form-check form-switch form-check-inline me-3">
                         <input class="form-check-input js-loop" type="checkbox" id="loop-checkbox">
                         <label class="form-check-label" for="loop-checkbox">Loop</label>
                     </div>
-                    <div class="form-check form-switch">
+                    <div class="form-check form-switch form-check-inline">
                         <input class="form-check-input js-draggable" type="checkbox" id="draggable-checkbox">
                         <label class="form-check-label" for="draggable-checkbox">Draggable</label>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6 col-xl-4">
                     <div class="form-group">
-                        <label for="formControlRange">Frames</label>
+                        <label for="formControlRange" class="d-none d-md-block">Frames</label>
                         <input class="form-range js-frames-input" id="formControlRange" max="61" min="1" type="range"
                                value="1">
                     </div>
@@ -92,48 +92,48 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-auto js-option-block">
-                    <div class="input-group mb-2 mx-auto" style="max-width: 150px;">
-                        <input type="text" class="form-control" placeholder="15" value="15">
+                    <div class="input-group mb-2 mx-auto">
+                        <input type="text" class="form-control small-input" placeholder="15" value="15">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary js-set-frame" type="button">Set frame</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="input-group mb-2 mx-auto js-option-block" style="max-width: 185px;">
-                        <input type="text" class="form-control" placeholder="30" value="30">
+                    <div class="input-group mb-2 mx-auto js-option-block">
+                        <input type="text" class="form-control small-input" placeholder="30" value="30">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary js-play-to" type="button">Play to (frame)</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="input-group mb-2 mx-auto js-option-block" style="max-width: 160px;">
-                        <input type="text" class="form-control" placeholder="20" value="20">
+                    <div class="input-group mb-2 mx-auto js-option-block">
+                        <input type="text" class="form-control small-input" placeholder="20" value="20">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary js-play-frames" type="button">Play Frames</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="input-group mb-2 mx-auto js-option-block" style="max-width: 230px;">
-                        <input type="text" class="form-control" placeholder="1000" value="1000">
+                    <div class="input-group mb-2 mx-auto js-option-block">
+                        <input type="text" class="form-control small-input" placeholder="1000" value="1000">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary js-set-duration" type="button">Set duration (ms)</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="input-group mb-2 mx-auto js-option-block" style="max-width: 230px;">
-                        <input type="text" class="form-control" placeholder="45" value="45">
+                    <div class="input-group mb-2 mx-auto js-option-block" >
+                        <input type="text" class="form-control small-input" placeholder="45" value="45">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary js-set-frame-time" type="button">Set frame delay (ms)</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-auto">
-                    <div class="input-group mb-2 mx-auto js-option-block" style="max-width: 125px;">
-                        <input type="text" class="form-control" placeholder="60" value="60">
+                    <div class="input-group mb-2 mx-auto js-option-block" >
+                        <input type="text" class="form-control small-input" placeholder="60" value="60">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary js-set-fps" type="button">Set fps</button>
                         </div>
@@ -156,7 +156,7 @@
 </div><!--/.container-->
 
 
-<script src="animate-sprite.min.js"></script>
+<script src="animate-sprite.umd.min.js"></script>
 <script src="app.js"></script>
 
 

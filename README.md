@@ -1,5 +1,5 @@
 <h1 align="center">
-   Animate Sprite
+   AnimateSprite
 </h1>
 
 ![npm (scoped)](https://img.shields.io/npm/v/@its2easy/animate-sprite)
@@ -7,12 +7,12 @@
 
 Demo - [codepen](https://codepen.io/its2easy/pen/VwvVRed)
 
-**animate-sprite** is a library (12kb without gzip) without built-in UI which allows to animate a 
+**AnimateSprite** is a library (12kb) without built-in UI, which allows to animate a 
 sequence of frames that looks like 3d rotation. It supports playing full animation
-sequence, play specified number of frames, rotate an image by the mouse and touch; and 
+sequence, play a specified number of frames, rotate an image with the mouse and touch; and 
 exposes an API to programmatically control the animation.
 
-To use it you should export animation from your 3d software as a series of 
+To use it, you should export animation from your 3d software as a series of 
 frames and combine them into one image file (sprite). If you want to use a sequence of 
 images instead of a single sprite, you could use [animate-images](https://github.com/its2easy/animate-images).
 
@@ -44,17 +44,15 @@ Create an element with a background:
 Initialize with options:
 ```javascript
 let element = document.getElementById('sprite');
-let sprite = new AnimateSprite(element,
-    {
-        width: 800, /* required */
-        height: 450, /* required */
-        frames: 90, /* required */
-        cols: 10,
-        fps: 60,
-        loop: true,
-        draggable: true
-    }
-);
+let sprite = new AnimateSprite(element, {
+    width: 800, /* required */
+    height: 450, /* required */
+    frames: 90, /* required */
+    cols: 10,
+    fps: 60,
+    loop: true,
+    draggable: true
+});
 sprite.play();
 ```
 Or with inline options and then initialize it:
@@ -132,9 +130,9 @@ rules: [
 `@its2easy/animate-sprite/build/untranspiled/animate-sprite.esm.js`
 
 ### Responsive behavior
-By default, you don't have to specify block sizes in css. Element with the
-sprite will take all available width and set its height based on width/height
-ratio from configuration options. To limit the size add `max-width` to the
+By default, you don't have to specify block sizes in css. The element with the
+sprite will take all available width and set its height based on the width/height
+ratio from the configuration options. To limit the size, add `max-width` to the
 sprite. You can also explicitly set `width`, but it will no longer adapt 
 to the container width (on small screens this can be changed with 
 `width: auto` inside media query).
@@ -157,12 +155,12 @@ after initialization.
 | **frameTime** <br> ```data-sprite-frame-time``` | number&#124;false | | false |  ms, time between frames |
 | **duration** <br> ```data-sprite-duration``` | number&#124;false |  | false |  ms, total time, alternative to frameTime |
 | **fps** <br> ```data-sprite-fps``` | number&#124;false |  | 24 |  fps, alternative to frameTime |
-| **reverse** <br> ```data-sprite-reverse``` | boolean |  | false |  Reverse direction of animation |
+| **reverse** <br> ```data-sprite-reverse``` | boolean |  | false |  Reverse animation direction |
 | **draggable** <br> ```data-sprite-draggable``` | boolean |  | false |  Draggable by mouse or touch |
-| **inversion** <br> ```data-sprite-inversion``` | boolean |  | false |  Inversion changes base direction |
+| **inversion** <br> ```data-sprite-inversion``` | boolean |  | false |  Inversion changes drag direction |
 | **dragModifier** <br> ```data-sprite-drag-modifier``` | number | | 1 | Sensitivity factor for user interaction. Only positive numbers are allowed |
-| **touchScrollMode** <br> ```data-sprite-touch-scroll-mode``` | string | | "pageScrollTimer" | Page scroll behavior with touch events _(only for events that fire in the plugin area)_. Available modes: **preventPageScroll** - touch scroll is always disabled. **allowPageScroll** - touch scroll is always enabled. **pageScrollTimer** - after the first interaction the scroll is not disabled; if the time between the end of the previous interaction and the start of a new one is less than _pageScrollTimerDelay_, then scroll will be disabled; if more time has passed, then scroll will be enabled again |
-| **pageScrollTimerDelay** <br> ```data-sprite-page-scroll-timer-delay``` | number | | 1500 | Time in ms when touch scroll will be disabled after the last user interaction, if touchScrollMode = "pageScrollTimer" |
+| **touchScrollMode** <br> ```data-sprite-touch-scroll-mode``` | string | | "pageScrollTimer" | Page scroll behavior with touch events _(only for events that fire in the plugin area)_. Available modes: `preventPageScroll` - touch scroll is always disabled. `allowPageScroll` - touch scroll is always enabled. `pageScrollTimer` - after the first interaction the scroll is not disabled; if the time between the end of the previous interaction and the start of a new one is less than _pageScrollTimerDelay_, then scroll will be disabled; if more time has passed, then scroll will be enabled again |
+| **pageScrollTimerDelay** <br> ```data-sprite-page-scroll-timer-delay``` | number | | 1500 | Time in ms when touch scroll will be disabled after the last user interaction, if `touchScrollMode: "pageScrollTimer"` |
 | **onAnimationEnd** | function(AnimateSprite) | | | Callback, occurs when animation has ended, receives plugin instance as a parameter |
 | **onAfterFrameChange** | function(AnimateSprite) | | | Callback, occurs after the frame has switched, receives plugin instance as a parameter |
 
@@ -244,9 +242,8 @@ sprite.playTo(85);
 ---
 
 ### playFrames
-Starts animation in the current direction with the specified number
-of frames in queue. If `options.loop: false` animation will stop
-if it reaches the first or the last frame.
+Start animation in the current direction with the specified number of frames in the queue. 
+If `options.loop: false` animation will stop when it reaches the first or the last frame.
 
 `parameters`
 - numberOfFrames {number} - Number of frames to play
@@ -258,7 +255,7 @@ instance.playFrames(200);
 ---
 
 ### setReverse
-Change the direction of the animation
+Change the direction of the animation.  Alias to ```setOption('reverse', true)```
 
 `parameters`
 - reverse : {boolean} - true to reverse, false to normal direction
@@ -269,9 +266,18 @@ sprite.setReverse(true);
 
 ---
 
+
+### getReverse
+Returns current reverse value. Alias to getOption('reverse')
+
+`returns` {boolean} - reverse
+
+
+---
+
 ### updateSizes
-Calculate new dimensions (sprite element and frame), should be called if element size was 
-changes manually. updateSizes is called automatically after resize
+Calculate new dimensions (sprite element and frame), this function should be called if element 
+size was changed by a script. Called automatically after page resize
 
 `returns` {AnimateSprite} - plugin instance
 
@@ -285,7 +291,7 @@ Returns option value
 ```javascript
 let loop = instance.getOption('loop');
 ```
-`returns` {number|string|boolean} - Option value
+`returns` {*} - Option value
 
 ---
 
@@ -293,12 +299,12 @@ let loop = instance.getOption('loop');
 Set new option value
 
 `parameters`
-- option : String - Option name. All options are allowed.
-- value : string|number|boolean - New value
+- option : {string} - Option name. All options are allowed.
+- value : {*} - New value
 ```javascript
 sprite.setOption('frameTime', 40);
 ```
-`returns` {animateSprite} - plugin instance
+`returns` {AnimateSprite} - plugin instance
 
 ---
 
@@ -310,18 +316,12 @@ Returns current frame number
 ---
 
 ### isAnimating
-Returns `true` if sprite is animating, else `false`
+Returns `true` if sprite is animating
 
 `returns` {boolean}
 
 ---
 
-### getReverse
-Returns current reverse value
-
-`returns` {boolean} - reverse
-
----
 
 ### reset
 Stop the animation and return to the first frame
@@ -365,4 +365,4 @@ element.addEventListener('sprite:drag-end', function (event) {
 * iOS Safari 13.4+
 
 ## <a name="license"></a>License
-Animate Sprite is provided under the [MIT License](https://opensource.org/licenses/MIT)
+AnimateSprite is provided under the [MIT License](https://opensource.org/licenses/MIT)

@@ -38,7 +38,7 @@ export default class DragInput{
     }
 
     /**
-     * Update one frame threshold in pixels, based on block width, should be called after nodeWidth change
+     * Update one frame threshold in pixels, based on DOM element width, should be called after nodeWidth change
      * @param newValue
      */
     updateThreshold(newValue = null){
@@ -100,7 +100,7 @@ export default class DragInput{
         deltaFrames = deltaFrames % this.settings.frames;
         // Add pixels to the next swipeMove if frames equivalent of swipe is not an integer number,
         // e.g one frame is 10px, swipeLength is 13px, we change 1 frame and add 3px to the next swipe,
-        // so fullwidth swipe is always rotate sprite for 1 turn / all frames (with 'dragModifier' = 1)
+        // so fullwidth swipe is always rotate sprite for 1 turn / all frames (with 'dragModifier' =  1)
         this.pixelsCorrection = swipeLength - (this.threshold * deltaFrames);
         let isReverse = (direction === 'left'); // left means backward (reverse: true)
         if (this.settings.inversion) isReverse = !isReverse;// invert direction

@@ -89,7 +89,7 @@ export default class Animation{
         if (isLongTaskBeforeRaf) deltaFrames = 1; // raf after long task, just move to the next frame
         else { // normal execution, calculate progress after the last frame change
             if (progress < 0) progress = 0; //it happens sometimes, when raf timestamp is from the past for some reason
-            deltaFrames = progress * this.settings.frames; // Ex. 0.45 or 1.25
+            deltaFrames = progress * this.settings.frames; // for example, 0.45 or 1.25
             // e.g. progress is 0.8 frames, queue is 0.25 frames, so now deltaFrames is 1.05 frames and we need to update canvas,
             // without this raf intervals will cause cumulative rounding errors, and actual fps will decrease
             deltaFrames = deltaFrames + this.framesQueue;

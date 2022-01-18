@@ -1,10 +1,10 @@
 {
   "name": "@its2easy/animate-sprite",
   "version": "2.1.0",
-  "description": "Javascript plugin to animate frames from sprite image",
+  "description": "Javascript plugin to animate sprite image",
   "author": "Dmitry Kovalev",
   "license": "MIT",
-  "main": "build/animate-sprite.min.js",
+  "main": "build/animate-sprite.umd.min.js",
   "module": "build/animate-sprite.esm.min.js",
   "types": "types/animate-sprite.d.ts",
   "publishConfig": {

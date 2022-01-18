@@ -1,9 +1,9 @@
-var fs = require('fs');
-var path = require('path');
+let fs = require('fs');
+let path = require('path');
 const { LIB_FILE_NAME } = require( './shared');
 
-var source = path.join(__dirname, `../build/${LIB_FILE_NAME}.min.js`);
-var dest = path.join(__dirname, `../example/${LIB_FILE_NAME}.min.js`);
+let source = path.join(__dirname, `../build/${LIB_FILE_NAME}.umd.min.js`);
+let dest = path.join(__dirname, `../example/${LIB_FILE_NAME}.umd.min.js`);
 
 fs.copyFile(source, dest, function (err) {
     if (err) return console.error(err);

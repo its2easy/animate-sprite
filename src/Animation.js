@@ -21,6 +21,7 @@ export default class Animation{
 
     play(){
         this.isAnimating = true;
+        this.#stopRequested = false; // fix for the case when stopRequested was set inside getNextFrame that was called outside #animate
         this.#lastUpdate = performance.now();
         requestAnimationFrame(this.#boundAnimate);
     }

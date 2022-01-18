@@ -13,7 +13,7 @@ import Animation from "./Animation";
  *         frames: 20,
  *         cols: 5,
  *         fps: 45,
- *     }
+ *     });
  */
 export default class AnimateSprite {
     #settings;
@@ -117,7 +117,7 @@ export default class AnimateSprite {
 
     /**
      * Start animation
-     * @returns {this} - plugin instance
+     * @returns {AnimateSprite} - plugin instance
      */
     play(){
         if ( !this.#animation.isAnimating ) this.#animation.play();

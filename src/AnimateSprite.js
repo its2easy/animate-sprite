@@ -247,9 +247,8 @@ export default class AnimateSprite {
                 this.#settings.frameTime = this.#settings.duration = this.#settings.fps = false; // Reset
                 this.#settings[option] = parseInt(value, 10); // set again because of reset
                 this.#animation.updateDuration();
-            } else if ( option === "draggable" ) {
-                this.#toggleDrag(value);
-            }
+            } else if ( option === "draggable" ) this.#toggleDrag(value);
+            else if (option === 'dragModifier') this.#settings.dragModifier = Math.abs(+value);
         } else {
             console.warn(`${option} is not allowed in setOption`);
         }
@@ -292,6 +291,7 @@ export default class AnimateSprite {
  * @property {boolean} [inversion=false] - Inversion defines base direction. It differs from reverse in that
  * reverse means forward or backward, and inversion determines which direction is forward. Affects animation and drag
  * @property {number|boolean} [draggable=false] - Draggable by mouse or touch
+ * @property {number} [dragModifier=1] - Sensitivity factor for user interaction. Only positive numbers are allowed
  * @property {'pageScrollTimer' | 'preventPageScroll' | 'allowPageScroll'} [touchScrollMode="pageScrollTimer"]
  * - Page scroll behavior with touch events (preventPageScroll,allowPageScroll, pageScrollTimer)
  * @property {number} [pageScrollTimerDelay=1500] - Time in ms when touch scroll will be disabled during interaction

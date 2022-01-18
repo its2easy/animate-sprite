@@ -87,7 +87,7 @@ export default class DragInput{
     }
     #swipeMove(){
         const direction = this.#swipeDirection();
-        const swipeLength = Math.round( Math.abs(this.#curX - this.#prevX) ) + this.#pixelsCorrection;
+        const swipeLength = Math.round( Math.abs(this.#curX - this.#prevX) * this.#settings.dragModifier ) + this.#pixelsCorrection;
 
         if ( swipeLength <= this.#threshold) return; // Ignore if pixels are less than 1 frame
         if ( direction !== 'left' && direction !== 'right') return; // Ignore vertical directions
@@ -100,7 +100,7 @@ export default class DragInput{
         deltaFrames = deltaFrames % this.#settings.frames;
         // Add pixels to the next swipeMove if frames equivalent of swipe is not an integer number,
         // e.g one frame is 10px, swipeLength is 13px, we change 1 frame and add 3px to the next swipe,
-        // so fullwidth swipe is always rotate sprite for 1 turn (all frames)
+        // so fullwidth swipe is always rotate sprite for 1 turn / all frames (with 'dragModifier' = 1)
         this.#pixelsCorrection = swipeLength - (this.#threshold * deltaFrames);
         this.#changeFrame(this.#getNextFrame( deltaFrames, (direction === 'left') ));// left means backward (reverse: true)
         this.#data.element.dispatchEvent(new CustomEvent('sprite:drag-change',

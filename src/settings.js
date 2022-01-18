@@ -4,6 +4,7 @@ export function validateParameters(node, options){
     if ( !(node instanceof HTMLElement || node instanceof Element || node instanceof HTMLDocument)) {
         throw new TypeError('Node is required');
     }
+    if ('dragModifier' in options) options.dragModifier = Math.abs(+options.dragModifier);
 }
 
 export function getSettings(node, options){
@@ -25,6 +26,7 @@ const defaultSettings = {
     reverse: false,
     inversion: false,
     draggable: false,
+    dragModifier: 1,
     touchScrollMode: "pageScrollTimer",
     pageScrollTimerDelay: 1500,
     onAnimationEnd: undefined,

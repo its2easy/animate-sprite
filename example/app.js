@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
             //reverse: false,
             inversion: true,
             draggable: true,
+            //dragModifier: 2,
             //touchScrollMode: "pageScrollTimer",
             //pageScrollTimerDelay: 2000,
             onAnimationEnd(plugin){

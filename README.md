@@ -158,8 +158,8 @@ after initialization.
 | **duration** <br> ```data-sprite-duration``` | number&#124;false |  | false |  ms, total time, alternative to frameTime |
 | **fps** <br> ```data-sprite-fps``` | number&#124;false |  | 24 |  fps, alternative to frameTime |
 | **reverse** <br> ```data-sprite-reverse``` | boolean |  | false |  Reverse direction of animation |
-| **inversion** <br> ```data-sprite-inversion``` | boolean |  | false |  Inversion defines base direction. It differs from ```reverse``` in that reverse means forward or backward, and inversion determines which direction is forward. Affects animation and drag |
 | **draggable** <br> ```data-sprite-draggable``` | boolean |  | false |  Draggable by mouse or touch |
+| **inversion** <br> ```data-sprite-inversion``` | boolean |  | false |  Inversion changes base direction |
 | **dragModifier** <br> ```data-sprite-drag-modifier``` | number | | 1 | Sensitivity factor for user interaction. Only positive numbers are allowed |
 | **touchScrollMode** <br> ```data-sprite-touch-scroll-mode``` | string | | "pageScrollTimer" | Page scroll behavior with touch events _(only for events that fire in the plugin area)_. Available modes: **preventPageScroll** - touch scroll is always disabled. **allowPageScroll** - touch scroll is always enabled. **pageScrollTimer** - after the first interaction the scroll is not disabled; if the time between the end of the previous interaction and the start of a new one is less than _pageScrollTimerDelay_, then scroll will be disabled; if more time has passed, then scroll will be enabled again |
 | **pageScrollTimerDelay** <br> ```data-sprite-page-scroll-timer-delay``` | number | | 1500 | Time in ms when touch scroll will be disabled after the last user interaction, if touchScrollMode = "pageScrollTimer" |

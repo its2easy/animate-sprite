@@ -289,9 +289,8 @@ export default class AnimateSprite {
  * @property {number|false} [duration] - ms, total time, alternative to frameTime
  * @property {number|false} [fps=24] - fps, alternative to frameTime
  * @property {boolean} [reverse=false] - Reverse direction of animation
- * @property {boolean} [inversion=false] - Inversion defines base direction. It differs from reverse in that
- * reverse means forward or backward, and inversion determines which direction is forward. Affects animation and drag
  * @property {number|boolean} [draggable=false] - Draggable by mouse or touch
+ * @property {boolean} [inversion=false] - Inversion changes drag direction
  * @property {number} [dragModifier=1] - Sensitivity factor for user interaction. Only positive numbers are allowed
  * @property {'pageScrollTimer' | 'preventPageScroll' | 'allowPageScroll'} [touchScrollMode="pageScrollTimer"]
  * - Page scroll behavior with touch events (preventPageScroll,allowPageScroll, pageScrollTimer)

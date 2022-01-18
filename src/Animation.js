@@ -26,6 +26,10 @@ export default class Animation{
         requestAnimationFrame(this.#boundAnimate);
     }
     stop(){
+        if ( this.isAnimating ){
+            this.#data.element.dispatchEvent( new Event('sprite:animation-end') );
+            if ( this.#settings.onAnimationEnd ) this.#settings.onAnimationEnd(this.#data.pluginApi);
+        }
         this.isAnimating = false;
         this.framesLeftToPlay = undefined;
     }

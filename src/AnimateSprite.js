@@ -187,7 +187,7 @@ export default class AnimateSprite {
      */
     playFrames(numberOfFrames = 0){
         numberOfFrames = Math.floor(numberOfFrames);
-        if (numberOfFrames < 0) return this; //empty animation
+        if (numberOfFrames < 0) return this.stop(); //empty animation
 
         this.#animation.framesLeftToPlay = numberOfFrames;
         return this.play();
@@ -295,5 +295,6 @@ export default class AnimateSprite {
  * - Page scroll behavior with touch events (preventPageScroll,allowPageScroll, pageScrollTimer)
  * @property {number} [pageScrollTimerDelay=1500] - Time in ms when touch scroll will be disabled during interaction
  * if options.touchScrollMode = "pageScrollTimer"
+ * @property {function(AnimateSprite):void} [onAnimationEnd] - Occurs when animation has ended
  */
 

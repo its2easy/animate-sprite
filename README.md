@@ -162,6 +162,7 @@ after initialization.
 | **draggable** <br> ```data-sprite-draggable``` | boolean |  | false |  Draggable by mouse or touch |
 | **touchScrollMode** <br> ```data-sprite-touch-scroll-mode``` | string | | "pageScrollTimer" | Page scroll behavior with touch events _(only for events that fire in the plugin area)_. Available modes: **preventPageScroll** - touch scroll is always disabled. **allowPageScroll** - touch scroll is always enabled. **pageScrollTimer** - after the first interaction the scroll is not disabled; if the time between the end of the previous interaction and the start of a new one is less than _pageScrollTimerDelay_, then scroll will be disabled; if more time has passed, then scroll will be enabled again |
 | **pageScrollTimerDelay** <br> ```data-sprite-page-scroll-timer-delay``` | number | | 1500 | Time in ms when touch scroll will be disabled after the last user interaction, if touchScrollMode = "pageScrollTimer" |
+| **onAnimationEnd** | function(AnimateSprite) | | | Callback, occurs when animation has ended, receives plugin instance as a parameter |
 
 > If multiple time options (`frameTime`, `duration` or `fps`) are set at the 
 same time, `frameTime` has higher priority, then `duration`, then `fps`.
@@ -342,6 +343,11 @@ Fires on every frame change while dragging. Frame number is in `event.detail.fra
 
 #### sprite:drag-end
 Fires when user stops dragging. Frame number is in `event.detail.frame`
+
+#### sprite:animation-end
+Fires after the animation end. If the second animation was started
+while the first was active, this event will be fired only after the
+second animation end.
 
 Example:
 ```javascript

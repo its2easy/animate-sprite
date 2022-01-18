@@ -17,6 +17,9 @@ document.addEventListener("DOMContentLoaded", function() {
             draggable: true,
             //touchScrollMode: "pageScrollTimer",
             //pageScrollTimerDelay: 2000,
+            onAnimationEnd(plugin){
+                console.log('Callback: onAnimationEnd');
+            },
         }
     );
     setupControls(sprite1);
@@ -92,6 +95,9 @@ document.addEventListener("DOMContentLoaded", function() {
         element.addEventListener('sprite:drag-end', function (event) {
             //console.log(event.detail.frame);
             console.log('sprite:drag-end');
+        });
+        element.addEventListener('sprite:animation-end', function () {
+            console.log(`Event: sprite:animation-end`);
         });
     }
 

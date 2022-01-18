@@ -27,6 +27,7 @@ const defaultSettings = {
     draggable: false,
     touchScrollMode: "pageScrollTimer",
     pageScrollTimerDelay: 1500,
+    onAnimationEnd: undefined,
 }
 export function getSettingsKeys(){
     return Object.keys(defaultSettings);

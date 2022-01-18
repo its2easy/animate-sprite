@@ -1,4 +1,4 @@
-import { validateParameters, getSettings, getSettingsKeys } from "./settings";
+import { validateParameters, validateSettings, getSettings, getSettingsKeys } from "./settings";
 import { normalizeFrameNumber } from "./utils";
 import DragInput from "./DragInput";
 import Animation from "./Animation";
@@ -37,6 +37,7 @@ export default class AnimateSprite {
     constructor( node, options ) {
         validateParameters(node, options);
         this.#settings = getSettings(node, options);
+        validateSettings(this.#settings);
         this.#data.element = node;
         this.#data.pluginApi = this;
         this.#boundCalculateSizes = this.#calculateSizes.bind(this);

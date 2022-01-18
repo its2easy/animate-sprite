@@ -4,6 +4,15 @@ export function validateParameters(node, options){
     if ( !(node instanceof HTMLElement || node instanceof Element || node instanceof HTMLDocument)) {
         throw new TypeError('Node is required');
     }
+}
+export function validateSettings(options){
+    ["width", "height", "frames"].forEach((el)=> {
+        options[el] = parseInt(options[el], 10);
+        if ( !isNumeric(options[el]) ) throw new TypeError(`options.${el} is required and must be a number`);
+    });
+    ["cols", "frameTime", "fps", "duration", "pageScrollTimerDelay"].forEach((el)=> {
+        if (options[el] ) options[el] = parseInt(options[el], 10);
+    });
     if ('dragModifier' in options) options.dragModifier = Math.abs(+options.dragModifier);
 }
 
@@ -13,9 +22,9 @@ export function getSettings(node, options){
 }
 
 const defaultSettings = {
-    width: 100,
-    height: 100,
-    frames: 24,
+    width: undefined,
+    height: undefined,
+    frames: undefined,
     cols: false,
 
     loop: false,

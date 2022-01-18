@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", function() {
             onAnimationEnd(plugin){
                 console.log('Callback: onAnimationEnd');
             },
+            // onAfterFrameChange(plugin){
+            //     console.log('Callback: onAfterFrameChange');
+            // },
         }
     );
     setupControls(sprite1);

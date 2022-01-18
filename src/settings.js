@@ -28,6 +28,7 @@ const defaultSettings = {
     touchScrollMode: "pageScrollTimer",
     pageScrollTimerDelay: 1500,
     onAnimationEnd: undefined,
+    onAfterFrameChange: undefined,
 }
 export function getSettingsKeys(){
     return Object.keys(defaultSettings);

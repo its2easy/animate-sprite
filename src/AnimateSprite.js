@@ -55,6 +55,7 @@ export default class AnimateSprite {
 
     #animateSprite(frame) {
         this.#data.element.style.backgroundPosition = this.#calculatePosition(frame);
+        if ( this.#settings.onAfterFrameChange ) this.#settings.onAfterFrameChange(this.#data.pluginApi);
     }
     #changeFrame(frameNumber){
         if (frameNumber === this.#data.currentFrame) return;//skip same frame
@@ -296,5 +297,6 @@ export default class AnimateSprite {
  * @property {number} [pageScrollTimerDelay=1500] - Time in ms when touch scroll will be disabled during interaction
  * if options.touchScrollMode = "pageScrollTimer"
  * @property {function(AnimateSprite):void} [onAnimationEnd] - Occurs when animation has ended
+ * @property {function(AnimateSprite):void} [onAfterFrameChange] - Occurs after the frame has switched
  */
 

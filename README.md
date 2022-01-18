@@ -7,7 +7,7 @@
 
 Demo - [codepen](https://codepen.io/its2easy/pen/VwvVRed)
 
-**animate-sprite** is a library (11kb without gzip) without built-in UI which allows to animate a 
+**animate-sprite** is a library (12kb without gzip) without built-in UI which allows to animate a 
 sequence of frames that looks like 3d rotation. It supports playing full animation
 sequence, play specified number of frames, rotate an image by the mouse and touch; and 
 exposes an API to programmatically control the animation.

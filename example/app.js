@@ -105,23 +105,23 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // // Second example
-    // let element2 = document.getElementById('sprite2');
-    // let sprite2 = new AnimateSprite(element2,
-    //     {
-    //         width: 600,
-    //         height: 350,
-    //         cols: 13,
-    //         frames: 61,
-    //         duration: 1000,
-    //         loop: false,
-    //     }
-    // );
-    // element2.addEventListener('mouseenter', () => {
-    //     sprite2.setReverse(false).play();
-    // });
-    // element2.addEventListener('mouseleave', () => {
-    //     sprite2.setReverse(true).play();
-    // });
+    // Second example
+    let element2 = document.getElementById('sprite2');
+    let sprite2 = new AnimateSprite(element2,
+        {
+            width: 600,
+            height: 350,
+            cols: 13,
+            frames: 61,
+            duration: 1000,
+            loop: false,
+        }
+    );
+    element2.addEventListener('mouseenter', () => {
+        sprite2.setReverse(false).play();
+    });
+    element2.addEventListener('mouseleave', () => {
+        sprite2.setReverse(true).play();
+    });
 });
 

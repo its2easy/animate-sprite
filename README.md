@@ -242,11 +242,11 @@ sprite.playTo(85);
 
 // shortestPath
 // if current frame is 2, it will play 1, 100, 99, 98
-instance.playTo(98, {
+sprite.playTo(98, {
     shortestPath: true
 });
 // (default) if current frame is 2, it will play 3, 4, 5 ... 97, 98
-instance.playTo(98);
+sprite.playTo(98);
 ```
 `returns` {AnimateSprite} - plugin instance
 

@@ -3,6 +3,7 @@ import { normalizeFrameNumber } from "./utils";
 import DragInput from "./DragInput";
 import Animation from "./Animation";
 
+//todo core-js 3.21 adds es.error.cause(wasm polyfill?) to every file, current 3.20 is ok, check in the future
 /**
  * Animate Sprite {@link https://github.com/its2easy/animate-sprite/}
  * @example

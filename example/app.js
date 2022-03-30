@@ -45,12 +45,12 @@ document.addEventListener("DOMContentLoaded", function() {
         prevBtn.addEventListener('click', () => { sprite.prev(); });
         resetBtn.addEventListener('click', () => { sprite.reset(); });
 
-        let reverse = sprite.getReverse();
+
         document.querySelector(".js-reverse").addEventListener('change', (event) => {
-            reverse = !reverse;
-            sprite.setReverse(reverse);
+            sprite.setReverse(!sprite.getReverse())
+            updateReverseValue(sprite);
         });
-        document.querySelector(".js-reverse").checked = reverse;
+        updateReverseValue(sprite);
 
         let loop = sprite.getOption('loop');
         document.querySelector('.js-loop').addEventListener('change', () => {
@@ -74,6 +74,13 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         document.querySelector('.js-play-to').addEventListener('click', function() {
             sprite.playTo(this.closest('.js-option-block').querySelector('input').value);
+            updateReverseValue(sprite);
+        });
+        document.querySelector('.js-play-to-shortest').addEventListener('click', function() {
+            sprite.playTo(+this.closest('.js-option-block').querySelector('input').value, {
+                shortestPath: true,
+            });
+            updateReverseValue(sprite);
         });
         document.querySelector('.js-play-frames').addEventListener('click', function() {
             sprite.playFrames(this.closest('.js-option-block').querySelector('input').value);
@@ -103,6 +110,10 @@ document.addEventListener("DOMContentLoaded", function() {
         element.addEventListener('sprite:animation-end', function () {
             console.log(`Event: sprite:animation-end`);
         });
+    }
+
+    function updateReverseValue(sprite){
+        document.querySelector(".js-reverse").checked = sprite.getReverse();
     }
 
     // Second example

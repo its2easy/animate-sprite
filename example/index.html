@@ -31,6 +31,22 @@
         .input-group .small-input{
             width: 50px;
         }
+        .btn{
+            padding: 6px 10px;
+        }
+        .button-two-lines{
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3px 10px;
+            line-height: 1.2;
+        }
+        .button-two-lines span:first-child{
+            font-size: 14px;
+        }
+        .button-two-lines span:last-child{
+            font-size: 11px;
+        }
         @media (max-width: 991.98px) {
             .sprite2{
                 max-width: none;
@@ -101,9 +117,19 @@
                 </div>
                 <div class="col-auto">
                     <div class="input-group mb-2 mx-auto js-option-block">
-                        <input type="text" class="form-control small-input" placeholder="30" value="30">
+                        <input type="text" class="form-control small-input" placeholder="40" value="40">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary js-play-to" type="button">Play to (frame)</button>
+                            <button class="btn btn-outline-secondary js-play-to" type="button">Play to</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="input-group mb-2 mx-auto js-option-block">
+                        <input type="text" class="form-control small-input" placeholder="45" value="45">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary button-two-lines js-play-to-shortest" type="button">
+                                <span>Play to</span><span>shortest path</span>
+                            </button>
                         </div>
                     </div>
                 </div>

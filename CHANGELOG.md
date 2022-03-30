@@ -1,4 +1,6 @@
 # Changelog
+## 2.2.1
+- new ```shortestPath``` option for ```playTo()```
 ## 2.2.0
 - new ```onAnimationEnd``` and ```onFrameChange``` callbacks
 - new ```sprite:animation-end``` event

@@ -172,14 +172,27 @@ export default class AnimateSprite {
     /**
      * Starts the animation, that plays until the specified frame number
      * @param {number} frameNumber - Target frame number
+     * @param {Object} [options] - Options
+     * @param {boolean} [options.shortestPath=false] - If set to true and loop enabled, will use the shortest path
      * @returns {AnimateSprite} - plugin instance
      */
-    playTo(frameNumber){
+    playTo(frameNumber, options){
         frameNumber = normalizeFrameNumber(frameNumber, this.#settings.frames);
-        if (frameNumber > this.#data.currentFrame)   this.setReverse(false); // move forward
-        else  this.setReverse(true); // move backward
 
-        return this.playFrames(Math.abs(frameNumber - this.#data.currentFrame))
+        const innerPathDistance = Math.abs(frameNumber - this.#data.currentFrame), // not crossing edge frames
+            outerPathDistance = this.#settings.frames - innerPathDistance, // crossing edges frames
+            shouldUseOuterPath = this.#settings.loop && options?.shortestPath && (outerPathDistance < innerPathDistance);
+
+        if ( !shouldUseOuterPath ) { // Inner path (default)
+            // long conditions to make them more readable
+            if (frameNumber > this.#data.currentFrame) this.setReverse(false); // move forward
+            else this.setReverse(true); // move backward
+        } else { // Outer path
+            if (frameNumber < this.#data.currentFrame) this.setReverse(false); // move forward
+            else this.setReverse(true); // move backward
+        }
+
+        return this.playFrames( (shouldUseOuterPath) ? outerPathDistance : innerPathDistance );
     }
     /**
      * Starts the animation in the current direction with the specified number of frames in queue
